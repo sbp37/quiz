@@ -402,6 +402,129 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// ── 배경음악 (Web Audio 긴박한 루프) ──
+let bgmNodes = [];
+let bgmPlaying = false;
+let bgmGain = null;
+
+function startBGM() {
+  if (bgmPlaying) return;
+  bgmPlaying = true;
+  try {
+    const ctx = getAudio();
+    bgmGain = ctx.createGain();
+    bgmGain.gain.value = 0.18;
+    bgmGain.connect(ctx.destination);
+    scheduleBGM(ctx, ctx.currentTime);
+  } catch(e) {}
+}
+
+function stopBGM() {
+  bgmPlaying = false;
+  try {
+    if (bgmGain) {
+      bgmGain.gain.setValueAtTime(bgmGain.gain.value, getAudio().currentTime);
+      bgmGain.gain.exponentialRampToValueAtTime(0.001, getAudio().currentTime + 0.5);
+    }
+    bgmNodes.forEach(n => { try { n.stop(getAudio().currentTime + 0.6); } catch(e){} });
+    bgmNodes = [];
+  } catch(e) {}
+}
+
+function scheduleBGM(ctx, startTime) {
+  if (!bgmPlaying) return;
+  // 긴박한 베이스라인 패턴 (120bpm, 16분음표)
+  const bpm = 128;
+  const beat = 60 / bpm;
+  const s16 = beat / 4;
+
+  // 킥드럼 패턴
+  const kicks = [0, 2, 4, 6];
+  kicks.forEach(b => {
+    makeKick(ctx, startTime + b * beat);
+  });
+
+  // 하이햇 (8분음표)
+  for (let i = 0; i < 16; i++) {
+    makeHihat(ctx, startTime + i * s16 * 2, i % 2 === 0 ? 0.6 : 0.3);
+  }
+
+  // 긴박한 베이스 멜로디
+  const bassNotes = [55, 55, 58, 55, 52, 55, 50, 52];
+  bassNotes.forEach((freq, i) => {
+    makeBass(ctx, startTime + i * beat * 0.5, freq, beat * 0.4);
+  });
+
+  // 긴장감 있는 리드 멜로디
+  const leadNotes = [
+    {f:440,t:0},{f:440,t:0.5},{f:494,t:1},{f:440,t:1.5},
+    {f:523,t:2},{f:494,t:2.5},{f:440,t:3},{f:415,t:3.5}
+  ];
+  leadNotes.forEach(({f,t}) => {
+    makeLead(ctx, startTime + t * beat, f, beat * 0.35);
+  });
+
+  const loopLen = 4 * beat * 2; // 8비트 루프
+  const loopTimer = setTimeout(() => scheduleBGM(ctx, startTime + loopLen), (loopLen - 0.1) * 1000);
+  bgmNodes.push({ stop: () => clearTimeout(loopTimer) });
+}
+
+function makeKick(ctx, t) {
+  if (!bgmPlaying) return;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(bgmGain);
+  o.type = 'sine';
+  o.frequency.setValueAtTime(150, t);
+  o.frequency.exponentialRampToValueAtTime(40, t + 0.15);
+  g.gain.setValueAtTime(1.2, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+  o.start(t); o.stop(t + 0.3);
+  bgmNodes.push(o);
+}
+
+function makeHihat(ctx, t, vol) {
+  if (!bgmPlaying) return;
+  const bufSize = ctx.sampleRate * 0.05;
+  const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1);
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const bpf = ctx.createBiquadFilter();
+  bpf.type = 'highpass'; bpf.frequency.value = 8000;
+  const g = ctx.createGain();
+  src.connect(bpf); bpf.connect(g); g.connect(bgmGain);
+  g.gain.setValueAtTime(vol * 0.4, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+  src.start(t); src.stop(t + 0.06);
+  bgmNodes.push(src);
+}
+
+function makeBass(ctx, t, freq, dur) {
+  if (!bgmPlaying) return;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(bgmGain);
+  o.type = 'sawtooth'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0.5, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  o.start(t); o.stop(t + dur + 0.05);
+  bgmNodes.push(o);
+}
+
+function makeLead(ctx, t, freq, dur) {
+  if (!bgmPlaying) return;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(bgmGain);
+  o.type = 'square'; o.frequency.value = freq;
+  g.gain.setValueAtTime(0.25, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+  o.start(t); o.stop(t + dur + 0.05);
+  bgmNodes.push(o);
+}
+
 // ── 효과음 (Web Audio API) ──
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx = null;
@@ -640,7 +763,7 @@ function listenLobby() {
 window.leaveRoom = async function() {
   clearListeners(); clearTimerInterval();
   if (roomCode) await remove(ref(db, `rooms/${roomCode}/players/${myId}`));
-  showScreen('home');
+  stopBGM(); showScreen('home');
 };
 
 window.startGame = async function() {
@@ -653,6 +776,7 @@ async function initGame() {
   const snap = await get(ref(db, `rooms/${roomCode}/totalRounds`));
   if (snap.exists()) totalRounds = snap.val();
   showScreen('game');
+  startBGM();
   listenGame();
 }
 
@@ -664,9 +788,14 @@ function listenGame() {
       return;
     }
     const rd = snap.val();
-    // solved 상태 변경 감지 → 팝업 표시
+    // solved 새로 true 됐을 때
     if (rd.solved && roundData && !roundData.solved) {
       showCorrectPopup(rd.solverName || '누군가', rd.word);
+      clearTimerInterval();
+      // 방장만 다음 라운드 시작 (타이머 한 번만 실행)
+      if (isHost) {
+        setTimeout(() => startNextRound(), 3500);
+      }
     }
     roundData = rd;
     roundSolvedHandled = rd.solved;
@@ -762,7 +891,7 @@ async function timeUp() {
   playTimeUp();
   await addSystemMsg(`⏰ 시간 초과! 정답은 "${roundData.word}"이었어요`);
   await update(ref(db, `rooms/${roomCode}/round`), { solved: true });
-  setTimeout(() => { if (isHost) startNextRound(); }, 3000);
+  // 방장이 round onValue에서 감지해서 처리
 }
 
 // ── 힌트 전송 ──
@@ -797,7 +926,7 @@ window.submitAnswer = async function() {
     const qSnap = await get(ref(db, `rooms/${roomCode}/players/${roundData.questionerId}`));
     await update(ref(db, `rooms/${roomCode}/players/${roundData.questionerId}`), { score: (qSnap.val()?.score || 0) + 5 });
     await update(ref(db, `rooms/${roomCode}/round`), { solved: true, solverId: myId, solverName: myName });
-    setTimeout(() => { if (isHost) startNextRound(); }, 3500);
+    // 방장이 onValue로 감지해서 startNextRound 호출 (아래 listenGame 참고)
   }
 };
 document.getElementById('answer-input').addEventListener('keydown', e => { if (e.key === 'Enter') window.submitAnswer(); });
@@ -842,7 +971,7 @@ function showCorrectPopup(solverName, word) {
 
 // ── 결과 ──
 async function showResult() {
-  clearListeners(); clearTimerInterval();
+  clearListeners(); clearTimerInterval(); stopBGM();
   showScreen('result');
   const pSnap = await get(ref(db, `rooms/${roomCode}/players`));
   const players = Object.entries(pSnap.val() || {}).map(([id,p]) => ({id,...p})).sort((a,b) => b.score - a.score);
@@ -876,10 +1005,11 @@ window.playAgain = async function() {
   await remove(ref(db, `rooms/${roomCode}/chat`));
   await update(ref(db, `rooms/${roomCode}`), { status: 'playing', currentRound: 0 });
   showScreen('game');
+  startBGM();
   listenGame();
 };
 
-window.goHome = function() { clearListeners(); clearTimerInterval(); showScreen('home'); };
+window.goHome = function() { clearListeners(); clearTimerInterval(); stopBGM(); showScreen('home'); };
 </script>
 </body>
 </html>
