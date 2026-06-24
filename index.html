@@ -37,317 +37,212 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 0;
   }
 
-  /* ── 화면 전환 ── */
   .screen { display: none; flex-direction: column; flex: 1; padding: 24px 20px; }
   .screen.active { display: flex; }
 
-  /* ── 헤더 ── */
-  .logo {
-    font-size: 2rem;
-    font-weight: 900;
-    text-align: center;
-    margin-bottom: 4px;
-    letter-spacing: -1px;
-  }
+  .logo { font-size: 2rem; font-weight: 900; text-align: center; margin-bottom: 4px; letter-spacing: -1px; }
   .logo span { color: var(--accent); }
   .subtitle { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 32px; }
 
-  /* ── 버튼 ── */
   .btn {
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: 14px;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.1s, opacity 0.1s;
-    margin-bottom: 12px;
+    width: 100%; padding: 16px; border: none; border-radius: 14px;
+    font-family: 'Noto Sans KR', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: transform 0.1s, opacity 0.1s; margin-bottom: 12px;
   }
   .btn:active { transform: scale(0.97); opacity: 0.9; }
   .btn-primary { background: var(--accent); color: #fff; }
   .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
   .btn-green { background: var(--accent3); color: #000; }
-  .btn-sm {
-    width: auto;
-    padding: 10px 20px;
-    font-size: 0.85rem;
-    margin-bottom: 0;
-    border-radius: 10px;
-  }
+  .btn-sm { width: auto; padding: 10px 20px; font-size: 0.85rem; margin-bottom: 0; border-radius: 10px; }
 
-  /* ── 인풋 ── */
   .input {
-    width: 100%;
-    padding: 14px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: var(--text);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1rem;
-    margin-bottom: 12px;
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; padding: 14px 16px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 12px; color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif; font-size: 1rem; margin-bottom: 12px;
+    outline: none; transition: border-color 0.2s;
   }
   .input:focus { border-color: var(--accent); }
   .input::placeholder { color: var(--muted); }
 
-  /* ── 카드 ── */
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
-  }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+  .label { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 
-  /* ── 라벨 ── */
-  .label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
-
-  /* ── 로비 화면 ── */
-  #screen-lobby .room-code {
-    font-size: 2.5rem;
-    font-weight: 900;
-    text-align: center;
-    letter-spacing: 8px;
-    color: var(--accent2);
-    margin: 8px 0;
-  }
+  /* 로비 */
+  #screen-lobby .room-code { font-size: 2.8rem; font-weight: 900; text-align: center; letter-spacing: 10px; color: var(--accent2); margin: 8px 0; }
   .player-list { display: flex; flex-wrap: wrap; gap: 8px; }
-  .player-chip {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    background: var(--surface);
-    border: 1px solid var(--border);
-  }
+  .player-chip { padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; background: var(--surface); border: 1px solid var(--border); }
   .player-chip.host::after { content: ' 👑'; }
   .player-chip.me { border-color: var(--accent3); color: var(--accent3); }
 
-  /* ── 게임 화면 ── */
-  #screen-game { padding: 0; }
+  /* 게임 화면 - 고정 레이아웃 */
+  #screen-game {
+    padding: 0;
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+  #screen-game.active { display: flex; }
 
   .game-header {
+    flex-shrink: 0;
     background: var(--surface);
-    padding: 16px 20px;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--border);
   }
-  .round-badge {
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 20px;
-  }
-  .timer-bar-wrap {
-    flex: 1;
-    margin: 0 12px;
-    height: 6px;
-    background: var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .timer-bar {
-    height: 100%;
-    background: var(--accent2);
-    border-radius: 3px;
-    transition: width 1s linear, background 0.5s;
-  }
-  .timer-num { font-weight: 700; font-size: 0.9rem; min-width: 24px; text-align: right; }
+  .round-badge { background: var(--accent); color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+  .timer-bar-wrap { flex: 1; margin: 0 12px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .timer-bar { height: 100%; background: var(--accent2); border-radius: 3px; transition: width 1s linear, background 0.5s; }
+  .timer-num { font-weight: 900; font-size: 1rem; min-width: 28px; text-align: right; }
+  .timer-num.urgent { color: var(--accent); animation: pulse 0.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
 
-  /* 출제자 패널 */
+  /* 출제자/정답자 패널 - 고정 높이 */
+  .info-panel {
+    flex-shrink: 0;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
   .questioner-panel {
-    margin: 16px 20px;
-    padding: 20px;
     background: linear-gradient(135deg, #1a1a2e, #16213e);
     border: 2px solid var(--accent);
-    border-radius: 20px;
-  }
-  .word-reveal {
-    font-size: 2rem;
-    font-weight: 900;
+    border-radius: 16px;
+    padding: 14px 16px;
     text-align: center;
-    color: var(--accent2);
-    margin: 12px 0;
-    letter-spacing: 2px;
   }
-  .category-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: var(--accent);
-    color: #fff;
-    margin-bottom: 8px;
-  }
+  .word-reveal { font-size: 1.8rem; font-weight: 900; color: var(--accent2); margin: 6px 0 4px; letter-spacing: 2px; }
+  .category-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; background: var(--accent); color: #fff; margin-bottom: 4px; }
 
-  /* 정답자 대기 패널 */
   .guesser-panel {
-    margin: 16px 20px;
-    padding: 20px;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 20px;
-    text-align: center;
+    border-radius: 16px;
+    padding: 12px 14px;
   }
-  .questioner-name {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--accent3);
-    margin-bottom: 8px;
-  }
+  .questioner-name { font-size: 0.95rem; font-weight: 700; color: var(--accent3); margin-bottom: 6px; }
   .hint-display {
     background: var(--surface);
-    border-radius: 12px;
-    padding: 14px;
-    min-height: 60px;
-    font-size: 1rem;
-    line-height: 1.6;
+    border-radius: 10px;
+    padding: 10px 12px;
+    min-height: 44px;
+    max-height: 80px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.5;
     text-align: left;
     color: var(--text);
     white-space: pre-wrap;
     word-break: break-all;
   }
 
-  /* 채팅 */
+  /* 채팅 - 남은 공간 차지 */
   .chat-area {
     flex: 1;
     overflow-y: auto;
-    padding: 12px 20px;
+    padding: 10px 16px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
+    min-height: 0;
   }
-  .chat-msg {
-    display: flex;
-    flex-direction: column;
-    max-width: 85%;
-  }
+
+  .chat-msg { display: flex; flex-direction: column; max-width: 80%; }
   .chat-msg.me { align-self: flex-end; align-items: flex-end; }
   .chat-msg.other { align-self: flex-start; }
   .chat-msg.system { align-self: center; max-width: 100%; }
-  .msg-name { font-size: 0.72rem; color: var(--muted); margin-bottom: 3px; }
-  .msg-bubble {
-    padding: 10px 14px;
-    border-radius: 14px;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    word-break: break-all;
-  }
+  .msg-name { font-size: 0.7rem; color: var(--muted); margin-bottom: 2px; }
+  .msg-bubble { padding: 8px 12px; border-radius: 14px; font-size: 0.88rem; line-height: 1.4; word-break: break-all; }
+
+  /* 말풍선 컬러 - 사람마다 다른 색 */
   .chat-msg.me .msg-bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
-  .chat-msg.other .msg-bubble { background: var(--surface); border-bottom-left-radius: 4px; }
-  .chat-msg.system .msg-bubble {
-    background: transparent;
-    color: var(--accent2);
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 6px 0;
-  }
-  .correct-msg .msg-bubble { background: var(--accent3) !important; color: #000 !important; font-weight: 700; }
+  .chat-msg.color-0 .msg-bubble { background: #2d4a7a; border-bottom-left-radius: 4px; }
+  .chat-msg.color-1 .msg-bubble { background: #4a2d6e; border-bottom-left-radius: 4px; }
+  .chat-msg.color-2 .msg-bubble { background: #2d6e4a; border-bottom-left-radius: 4px; }
+  .chat-msg.color-3 .msg-bubble { background: #6e4a2d; border-bottom-left-radius: 4px; }
+  .chat-msg.color-4 .msg-bubble { background: #5a2d4a; border-bottom-left-radius: 4px; }
+  .chat-msg.hint-bubble .msg-bubble { background: #1e3a5f; border-left: 3px solid var(--accent2); border-bottom-left-radius: 4px; }
+  .chat-msg.system .msg-bubble { background: transparent; color: var(--accent2); font-weight: 700; font-size: 0.82rem; text-align: center; padding: 4px 0; }
 
-  /* 힌트 입력 (출제자) */
-  .hint-input-area {
-    padding: 12px 20px;
+  /* 입력 영역 - 항상 하단 고정 */
+  .input-area {
+    flex-shrink: 0;
+    padding: 10px 16px;
     border-top: 1px solid var(--border);
     background: var(--bg);
   }
-  .hint-input-row { display: flex; gap: 8px; }
-  .hint-input-row .input { margin-bottom: 0; flex: 1; }
+  .input-row { display: flex; gap: 8px; }
+  .input-row .input { margin-bottom: 0; flex: 1; padding: 12px 14px; font-size: 0.95rem; }
 
-  /* 정답 입력 (정답자) */
-  .answer-input-area {
-    padding: 12px 20px;
-    border-top: 1px solid var(--border);
-    background: var(--bg);
-  }
-  .answer-input-row { display: flex; gap: 8px; }
-  .answer-input-row .input { margin-bottom: 0; flex: 1; }
-
-  /* ── 결과 화면 ── */
+  /* 결과 화면 */
   #screen-result { text-align: center; }
-  .podium { display: flex; align-items: flex-end; justify-content: center; gap: 8px; margin: 24px 0; }
-  .podium-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-  .podium-rank { font-size: 1.5rem; }
-  .podium-name { font-size: 0.8rem; font-weight: 700; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .podium-score { font-size: 0.9rem; color: var(--accent2); font-weight: 700; }
+  .podium { display: flex; align-items: flex-end; justify-content: center; gap: 8px; margin: 20px 0; }
+  .podium-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .podium-rank { font-size: 1.4rem; }
+  .podium-name { font-size: 0.78rem; font-weight: 700; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .podium-score { font-size: 0.85rem; color: var(--accent2); font-weight: 700; }
   .podium-bar { width: 60px; border-radius: 8px 8px 0 0; }
-  .p1 .podium-bar { background: var(--accent2); height: 100px; }
-  .p2 .podium-bar { background: var(--muted); height: 70px; }
-  .p3 .podium-bar { background: #cd7f32; height: 50px; }
-
+  .p1 .podium-bar { background: var(--accent2); height: 90px; }
+  .p2 .podium-bar { background: #aaa; height: 65px; }
+  .p3 .podium-bar { background: #cd7f32; height: 45px; }
   .rank-list { text-align: left; }
-  .rank-item {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background: var(--card);
-    border-radius: 12px;
-    margin-bottom: 8px;
-    gap: 12px;
-  }
+  .rank-item { display: flex; align-items: center; padding: 12px 16px; background: var(--card); border-radius: 12px; margin-bottom: 8px; gap: 12px; }
   .rank-num { font-size: 1.2rem; font-weight: 900; width: 28px; }
   .rank-name { flex: 1; font-weight: 600; }
   .rank-score { color: var(--accent2); font-weight: 700; }
 
-  /* 로딩 */
-  .loading { text-align: center; padding: 40px; color: var(--muted); }
-  .spinner {
-    width: 32px; height: 32px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 12px;
-  }
+  .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* 정답 오버레이 */
-  .correct-overlay {
+  /* 정답 팝업 */
+  .correct-popup {
     position: fixed;
     inset: 0;
-    background: rgba(0,212,170,0.15);
+    background: rgba(0,0,0,0.75);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 100;
+    z-index: 200;
+    opacity: 0;
     pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .correct-popup.show { opacity: 1; }
+  .correct-popup-box {
+    background: linear-gradient(135deg, #0d2b1a, #0a1f2e);
+    border: 3px solid var(--accent3);
+    border-radius: 28px;
+    padding: 36px 40px;
+    text-align: center;
+    transform: scale(0.7);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 300px;
+    width: 85%;
+  }
+  .correct-popup.show .correct-popup-box { transform: scale(1); }
+  .correct-popup-emoji { font-size: 3.5rem; margin-bottom: 8px; }
+  .correct-popup-title { font-size: 1.6rem; font-weight: 900; color: var(--accent3); margin-bottom: 6px; }
+  .correct-popup-name { font-size: 1.1rem; color: var(--text); margin-bottom: 4px; }
+  .correct-popup-word { font-size: 1.4rem; font-weight: 900; color: var(--accent2); }
+
+  /* 폭죽 캔버스 */
+  #fireworks-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 199;
     opacity: 0;
     transition: opacity 0.3s;
   }
-  .correct-overlay.show { opacity: 1; }
-  .correct-overlay-text {
-    font-size: 3rem;
-    font-weight: 900;
-    color: var(--accent3);
-    text-shadow: 0 0 30px rgba(0,212,170,0.8);
-    animation: pop 0.4s ease;
-  }
-  @keyframes pop { 0% { transform: scale(0.5); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+  #fireworks-canvas.show { opacity: 1; }
 
-  .divider { height: 1px; background: var(--border); margin: 20px 0; }
   .text-center { text-align: center; }
   .text-muted { color: var(--muted); font-size: 0.85rem; }
   .mt-auto { margin-top: auto; }
-  .mb-8 { margin-bottom: 8px; }
   .gap-row { display: flex; gap: 8px; }
 </style>
 </head>
@@ -356,7 +251,7 @@
 
   <!-- ① 시작 화면 -->
   <div class="screen active" id="screen-home">
-    <div style="margin-top: 60px;">
+    <div style="margin-top: 56px;">
       <div class="logo">🎯 말<span>해</span>봐!</div>
       <div class="subtitle">설명하면 맞추는 실시간 퀴즈</div>
     </div>
@@ -369,12 +264,14 @@
     <div class="card">
       <div class="label">방 코드 입력</div>
       <div class="gap-row">
-        <input class="input" id="input-room-code" placeholder="예: A1B2" maxlength="4" style="text-transform:uppercase; margin-bottom:0; letter-spacing:4px; font-weight:700;">
+        <input class="input" id="input-room-code" placeholder="4자리 숫자" maxlength="4"
+          style="margin-bottom:0; letter-spacing:6px; font-weight:900; font-size:1.2rem;"
+          inputmode="numeric" pattern="[0-9]*">
         <button class="btn btn-green btn-sm" style="white-space:nowrap" onclick="goJoinRoom()">입장</button>
       </div>
     </div>
     <div class="mt-auto text-center text-muted" style="padding: 20px 0;">
-      영화·음식·나라·동물 랜덤 제시어<br>설명하고 맞추고 점수 쌓기!
+      영화·음식·나라·동물·아이돌 랜덤 제시어<br>설명하고 맞추고 점수 쌓기!
     </div>
   </div>
 
@@ -415,46 +312,46 @@
 
   <!-- ③ 게임 화면 -->
   <div class="screen" id="screen-game">
+    <!-- 상단 타이머/라운드 -->
     <div class="game-header">
       <div class="round-badge" id="game-round-badge">1/8</div>
       <div class="timer-bar-wrap">
         <div class="timer-bar" id="timer-bar" style="width:100%"></div>
       </div>
-      <div class="timer-num" id="timer-num">60</div>
+      <div class="timer-num" id="timer-num">90</div>
     </div>
 
-    <!-- 출제자 뷰 -->
-    <div id="questioner-view" style="display:none; padding: 0 20px; margin-top: 16px;">
-      <div class="questioner-panel">
-        <div class="label" style="margin-bottom:4px;">제시어 (나만 보임)</div>
-        <div style="margin-bottom: 6px;"><span class="category-badge" id="word-category">영화</span></div>
-        <div class="word-reveal" id="word-display">???</div>
-        <div class="text-muted" style="font-size:0.8rem; text-align:center;">직접 제시어를 말하면 안 돼요!</div>
+    <!-- 정보 패널 (고정) -->
+    <div class="info-panel" id="info-panel">
+      <!-- 출제자 뷰 -->
+      <div id="questioner-view" style="display:none;">
+        <div class="questioner-panel">
+          <div><span class="category-badge" id="word-category">영화</span></div>
+          <div class="word-reveal" id="word-display">???</div>
+          <div class="text-muted" style="font-size:0.75rem;">직접 제시어를 말하면 안 돼요!</div>
+        </div>
+      </div>
+      <!-- 정답자 뷰 -->
+      <div id="guesser-view" style="display:none;">
+        <div class="guesser-panel">
+          <div class="questioner-name" id="questioner-name-display">○○가 설명 중 💬</div>
+          <div class="hint-display" id="hint-display">힌트를 기다리는 중...</div>
+        </div>
       </div>
     </div>
 
-    <!-- 정답자 뷰 -->
-    <div id="guesser-view" style="display:none; padding: 0 20px; margin-top: 16px;">
-      <div class="guesser-panel">
-        <div class="questioner-name" id="questioner-name-display">○○가 설명 중</div>
-        <div class="label" style="text-align:left; margin-bottom:6px;">힌트</div>
-        <div class="hint-display" id="hint-display">힌트를 기다리는 중...</div>
-      </div>
-    </div>
-
+    <!-- 채팅 (스크롤) -->
     <div class="chat-area" id="chat-area"></div>
 
-    <!-- 출제자 힌트 입력 -->
-    <div class="hint-input-area" id="hint-input-area" style="display:none;">
-      <div class="hint-input-row">
-        <input class="input" id="hint-input" placeholder="힌트 입력 (제시어 직접 말하면 안됨!)" maxlength="50">
+    <!-- 입력 영역 (고정 하단) -->
+    <div class="input-area" id="hint-input-area" style="display:none;">
+      <div class="input-row">
+        <input class="input" id="hint-input" placeholder="힌트 입력 (제시어는 말하면 안됨!)" maxlength="50">
         <button class="btn btn-primary btn-sm" onclick="sendHint()">전송</button>
       </div>
     </div>
-
-    <!-- 정답자 정답 입력 -->
-    <div class="answer-input-area" id="answer-input-area" style="display:none;">
-      <div class="answer-input-row">
+    <div class="input-area" id="answer-input-area" style="display:none;">
+      <div class="input-row">
         <input class="input" id="answer-input" placeholder="정답 입력..." maxlength="20">
         <button class="btn btn-green btn-sm" onclick="submitAnswer()">제출</button>
       </div>
@@ -474,9 +371,17 @@
 
 </div>
 
-<!-- 정답 오버레이 -->
-<div class="correct-overlay" id="correct-overlay">
-  <div class="correct-overlay-text">🎉 정답!</div>
+<!-- 폭죽 캔버스 -->
+<canvas id="fireworks-canvas"></canvas>
+
+<!-- 정답 팝업 -->
+<div class="correct-popup" id="correct-popup">
+  <div class="correct-popup-box">
+    <div class="correct-popup-emoji">🎉</div>
+    <div class="correct-popup-title">정답!</div>
+    <div class="correct-popup-name" id="popup-solver-name"></div>
+    <div class="correct-popup-word" id="popup-word"></div>
+  </div>
 </div>
 
 <script type="module">
@@ -497,45 +402,183 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// ── 효과음 (Web Audio API) ──
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+
+function playClick() {
+  try {
+    const ctx = getAudio();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 800; o.type = 'sine';
+    g.gain.setValueAtTime(0.15, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+    o.start(); o.stop(ctx.currentTime + 0.08);
+  } catch(e) {}
+}
+
+function playCorrect() {
+  try {
+    const ctx = getAudio();
+    [523, 659, 784, 1047].forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq; o.type = 'sine';
+      const t = ctx.currentTime + i * 0.1;
+      g.gain.setValueAtTime(0.2, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+      o.start(t); o.stop(t + 0.25);
+    });
+  } catch(e) {}
+}
+
+function playTick() {
+  try {
+    const ctx = getAudio();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 1200; o.type = 'square';
+    g.gain.setValueAtTime(0.08, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+    o.start(); o.stop(ctx.currentTime + 0.05);
+  } catch(e) {}
+}
+
+function playTimeUp() {
+  try {
+    const ctx = getAudio();
+    [400, 300, 200].forEach((freq, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = freq; o.type = 'sawtooth';
+      const t = ctx.currentTime + i * 0.15;
+      g.gain.setValueAtTime(0.15, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+      o.start(t); o.stop(t + 0.2);
+    });
+  } catch(e) {}
+}
+
+// 버튼 클릭 효과음 연결
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('click', playClick);
+});
+
+// ── 폭죽 ──
+const canvas = document.getElementById('fireworks-canvas');
+const fctx = canvas.getContext('2d');
+let particles = [];
+let animFrame = null;
+
+function launchFireworks() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.classList.add('show');
+  particles = [];
+  for (let i = 0; i < 120; i++) {
+    const angle = (Math.PI * 2 * i) / 120;
+    const speed = 3 + Math.random() * 6;
+    const colors = ['#f5a623','#e94560','#00d4aa','#a78bfa','#fbbf24','#34d399'];
+    particles.push({
+      x: window.innerWidth / 2,
+      y: window.innerHeight * 0.4,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 1, size: 4 + Math.random() * 4
+    });
+  }
+  // 두 번째 폭죽
+  setTimeout(() => {
+    for (let i = 0; i < 80; i++) {
+      const angle = (Math.PI * 2 * i) / 80;
+      const speed = 2 + Math.random() * 5;
+      const colors = ['#f5a623','#fff','#00d4aa','#e94560'];
+      particles.push({
+        x: window.innerWidth * 0.3 + Math.random() * window.innerWidth * 0.4,
+        y: window.innerHeight * 0.35,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 1,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        life: 1, size: 3 + Math.random() * 3
+      });
+    }
+  }, 200);
+  animateFireworks();
+}
+
+function animateFireworks() {
+  fctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.life > 0.01);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    p.vy += 0.15; p.vx *= 0.98;
+    p.life -= 0.018;
+    fctx.globalAlpha = p.life;
+    fctx.fillStyle = p.color;
+    fctx.beginPath();
+    fctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    fctx.fill();
+  });
+  fctx.globalAlpha = 1;
+  if (particles.length > 0) {
+    animFrame = requestAnimationFrame(animateFireworks);
+  } else {
+    canvas.classList.remove('show');
+  }
+}
+
 // ── 제시어 DB ──
 const WORDS = {
-  "🎬 영화/드라마": ["기생충","인터스텔라","어벤져스","타이타닉","해리포터","반지의제왕","레옹","올드보이","공동경비구역JSA","범죄도시","신과함께","괴물","베테랑","군함도","극한직업","부산행","오징어게임","이상한변호사우영우","이태원클라쓰","사내맞선"],
+  "🎬 영화/드라마": ["기생충","인터스텔라","어벤져스","타이타닉","해리포터","반지의제왕","레옹","올드보이","범죄도시","신과함께","괴물","베테랑","극한직업","부산행","오징어게임","이상한변호사우영우","이태원클라쓰","사내맞선","무빙","지옥"],
   "🍔 음식": ["삼겹살","치킨","짜장면","냉면","비빔밥","된장찌개","순대","떡볶이","라면","김치찌개","삼계탕","갈비","초밥","피자","햄버거","파스타","마라탕","탕후루","흑당버블티","타코"],
   "🌍 나라/도시": ["프랑스","일본","브라질","호주","이집트","캐나다","멕시코","인도","터키","아르헨티나","서울","도쿄","파리","뉴욕","런던","두바이","바르셀로나","방콕","베니스","시드니"],
-  "🐾 동물": ["판다","기린","문어","독수리","코알라","플라밍고","카멜레온","북극곰","만타가오리","타조","카피바라","해달","미어캣","알파카","악어","해파리","가오리","치타","고릴라","펭귄"],
-  "🎵 연예인/아이돌": ["BTS","블랙핑크","뉴진스","아이브","에스파","세븐틴","스트레이키즈","르세라핌","NCT","샤이니","빅뱅","소녀시대","2NE1","엑소","방탄소년단","트와이스","레드벨벳","있지","(여자)아이들","케플러"]
+  "🐾 동물": ["판다","기린","문어","독수리","코알라","플라밍고","카멜레온","북극곰","타조","카피바라","해달","미어캣","알파카","악어","해파리","치타","고릴라","펭귄","나무늘보","해마"],
+  "🎵 연예인/아이돌": ["BTS","블랙핑크","뉴진스","아이브","에스파","세븐틴","스트레이키즈","르세라핌","NCT","샤이니","빅뱅","소녀시대","2NE1","엑소","트와이스","레드벨벳","있지","(여자)아이들","케플러","아일릿"]
 };
 
 const CATEGORIES = Object.keys(WORDS);
-
 function getRandomWord() {
   const cat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
   const arr = WORDS[cat];
   return { category: cat, word: arr[Math.floor(Math.random() * arr.length)] };
 }
 
-// ── 상태 ──
-let myName = '';
-let myId = '';
-let roomCode = '';
-let isHost = false;
-let currentScreen = 'home';
-let listeners = {};
-let timerInterval = null;
-let roundData = null;
-let totalRounds = 8;
-let currentHints = '';
+// 말풍선 색상 (닉네임 해시)
+const COLOR_MAP = {};
+let colorIdx = 0;
+function getColorClass(senderId) {
+  if (!COLOR_MAP[senderId]) {
+    COLOR_MAP[senderId] = colorIdx % 5;
+    colorIdx++;
+  }
+  return 'color-' + COLOR_MAP[senderId];
+}
 
-// ── 유틸 ──
+// ── 상태 ──
+let myName = '', myId = '', roomCode = '', isHost = false;
+let listeners = {}, timerInterval = null, roundData = null, totalRounds = 8;
+let lastTickSecond = -1;
+let roundSolvedHandled = false;
+
 function genId() { return Math.random().toString(36).slice(2, 10); }
-function genRoomCode() { return Math.random().toString(36).slice(2,6).toUpperCase(); }
+function genRoomCode() { return String(Math.floor(1000 + Math.random() * 9000)); }
+
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
-  currentScreen = id;
 }
 function clearListeners() {
-  Object.values(listeners).forEach(unsub => { try { unsub(); } catch(e){} });
+  Object.values(listeners).forEach(fn => { try { fn(); } catch(e){} });
   listeners = {};
 }
 
@@ -543,45 +586,23 @@ function clearListeners() {
 window.goCreateRoom = async function() {
   const name = document.getElementById('input-name').value.trim();
   if (!name) { alert('닉네임을 입력해주세요!'); return; }
-  myName = name;
-  myId = genId();
-  roomCode = genRoomCode();
-  isHost = true;
-
-  await set(ref(db, `rooms/${roomCode}`), {
-    host: myId,
-    status: 'lobby',
-    totalRounds: 8,
-    currentRound: 0,
-    createdAt: serverTimestamp()
-  });
-  await set(ref(db, `rooms/${roomCode}/players/${myId}`), {
-    name: myName, score: 0, isHost: true, joinedAt: serverTimestamp()
-  });
-
+  myName = name; myId = genId(); roomCode = genRoomCode(); isHost = true;
+  await set(ref(db, `rooms/${roomCode}`), { host: myId, status: 'lobby', totalRounds: 8, currentRound: 0, createdAt: serverTimestamp() });
+  await set(ref(db, `rooms/${roomCode}/players/${myId}`), { name: myName, score: 0, isHost: true, joinedAt: serverTimestamp() });
   enterLobby();
 };
 
 window.goJoinRoom = async function() {
   const name = document.getElementById('input-name').value.trim();
-  const code = document.getElementById('input-room-code').value.trim().toUpperCase();
+  const code = document.getElementById('input-room-code').value.trim();
   if (!name) { alert('닉네임을 입력해주세요!'); return; }
-  if (!code || code.length !== 4) { alert('방 코드를 확인해주세요!'); return; }
-
+  if (!code || code.length !== 4) { alert('방 코드 4자리를 입력해주세요!'); return; }
   const snap = await get(ref(db, `rooms/${code}`));
   if (!snap.exists()) { alert('존재하지 않는 방이에요!'); return; }
   const room = snap.val();
   if (room.status !== 'lobby') { alert('이미 게임이 시작된 방이에요!'); return; }
-
-  myName = name;
-  myId = genId();
-  roomCode = code;
-  isHost = false;
-
-  await set(ref(db, `rooms/${roomCode}/players/${myId}`), {
-    name: myName, score: 0, isHost: false, joinedAt: serverTimestamp()
-  });
-
+  myName = name; myId = genId(); roomCode = code; isHost = false;
+  await set(ref(db, `rooms/${roomCode}/players/${myId}`), { name: myName, score: 0, isHost: false, joinedAt: serverTimestamp() });
   enterLobby();
 };
 
@@ -595,44 +616,33 @@ function enterLobby() {
 }
 
 function listenLobby() {
-  // 플레이어 목록
-  const playersRef = ref(db, `rooms/${roomCode}/players`);
-  listeners.players = onValue(playersRef, snap => {
+  listeners.players = onValue(ref(db, `rooms/${roomCode}/players`), snap => {
     const players = snap.val() || {};
     const hostId = Object.entries(players).find(([,p]) => p.isHost)?.[0];
     document.getElementById('lobby-count').textContent = Object.keys(players).length;
-    const list = document.getElementById('lobby-players');
-    list.innerHTML = Object.entries(players).map(([id, p]) => {
+    document.getElementById('lobby-players').innerHTML = Object.entries(players).map(([id, p]) => {
       let cls = 'player-chip';
       if (id === hostId) cls += ' host';
       if (id === myId) cls += ' me';
       return `<span class="${cls}">${p.name}</span>`;
     }).join('');
   });
-
-  // 게임 시작 감지
-  const statusRef = ref(db, `rooms/${roomCode}/status`);
-  listeners.status = onValue(statusRef, snap => {
+  listeners.status = onValue(ref(db, `rooms/${roomCode}/status`), snap => {
     if (snap.val() === 'playing') {
       off(ref(db, `rooms/${roomCode}/players`));
       off(ref(db, `rooms/${roomCode}/status`));
-      delete listeners.players;
-      delete listeners.status;
+      delete listeners.players; delete listeners.status;
       initGame();
     }
   });
 }
 
 window.leaveRoom = async function() {
-  clearListeners();
-  clearTimerInterval();
-  if (roomCode) {
-    await remove(ref(db, `rooms/${roomCode}/players/${myId}`));
-  }
+  clearListeners(); clearTimerInterval();
+  if (roomCode) await remove(ref(db, `rooms/${roomCode}/players/${myId}`));
   showScreen('home');
 };
 
-// ── 게임 시작 ──
 window.startGame = async function() {
   const rounds = parseInt(document.getElementById('select-rounds').value);
   totalRounds = rounds;
@@ -640,37 +650,35 @@ window.startGame = async function() {
 };
 
 async function initGame() {
-  // totalRounds 읽기
   const snap = await get(ref(db, `rooms/${roomCode}/totalRounds`));
   if (snap.exists()) totalRounds = snap.val();
-
   showScreen('game');
   listenGame();
 }
 
 // ── 게임 리스닝 ──
 function listenGame() {
-  // 라운드 데이터
-  const roundRef = ref(db, `rooms/${roomCode}/round`);
-  listeners.round = onValue(roundRef, async snap => {
+  listeners.round = onValue(ref(db, `rooms/${roomCode}/round`), async snap => {
     if (!snap.exists()) {
       if (isHost) await startNextRound();
       return;
     }
-    roundData = snap.val();
-    renderRound(roundData);
+    const rd = snap.val();
+    // solved 상태 변경 감지 → 팝업 표시
+    if (rd.solved && roundData && !roundData.solved) {
+      showCorrectPopup(rd.solverName || '누군가', rd.word);
+    }
+    roundData = rd;
+    roundSolvedHandled = rd.solved;
+    renderRound(rd);
   });
 
-  // 채팅
-  const chatRef = ref(db, `rooms/${roomCode}/chat`);
-  listeners.chat = onValue(chatRef, snap => {
+  listeners.chat = onValue(ref(db, `rooms/${roomCode}/chat`), snap => {
     const msgs = snap.val() ? Object.values(snap.val()).sort((a,b) => a.ts - b.ts) : [];
     renderChat(msgs);
   });
 
-  // 상태 (결과)
-  const statusRef = ref(db, `rooms/${roomCode}/status`);
-  listeners.statusGame = onValue(statusRef, snap => {
+  listeners.statusGame = onValue(ref(db, `rooms/${roomCode}/status`), snap => {
     if (snap.val() === 'result') showResult();
   });
 }
@@ -679,80 +687,70 @@ async function startNextRound() {
   const snap = await get(ref(db, `rooms/${roomCode}/currentRound`));
   const cur = snap.val() || 0;
   const next = cur + 1;
-
   if (next > totalRounds) {
     await update(ref(db, `rooms/${roomCode}`), { status: 'result' });
     return;
   }
-
-  // 순서 결정 (플레이어 목록)
   const pSnap = await get(ref(db, `rooms/${roomCode}/players`));
   const players = Object.entries(pSnap.val() || {});
-  const questionerId = players[(next - 1) % players.length][0];
-  const questionerName = players[(next - 1) % players.length][1].name;
-
+  const qi = (next - 1) % players.length;
+  const questionerId = players[qi][0];
+  const questionerName = players[qi][1].name;
   const { category, word } = getRandomWord();
-
-  // 채팅 초기화
   await remove(ref(db, `rooms/${roomCode}/chat`));
-
   await update(ref(db, `rooms/${roomCode}`), { currentRound: next });
   await set(ref(db, `rooms/${roomCode}/round`), {
-    roundNum: next,
-    questionerId,
-    questionerName,
-    category,
-    word,
-    hints: '',
-    solved: false,
-    startedAt: Date.now()
+    roundNum: next, questionerId, questionerName, category, word,
+    hints: '', solved: false, startedAt: Date.now()
   });
-
-  addSystemMsg(`🎲 ${next}라운드 시작! ${questionerName}이(가) 설명합니다`);
+  await addSystemMsg(`🎲 ${next}라운드! ${questionerName}이(가) 설명합니다`);
 }
 
 function renderRound(rd) {
   if (!rd) return;
-
   document.getElementById('game-round-badge').textContent = `${rd.roundNum}/${totalRounds}`;
-
-  const isQuestioner = rd.questionerId === myId;
-  document.getElementById('questioner-view').style.display = isQuestioner ? 'block' : 'none';
-  document.getElementById('guesser-view').style.display = isQuestioner ? 'none' : 'block';
-  document.getElementById('hint-input-area').style.display = isQuestioner && !rd.solved ? 'flex' : 'none';
-  document.getElementById('answer-input-area').style.display = !isQuestioner && !rd.solved ? 'flex' : 'none';
-
-  if (isQuestioner) {
+  const isQ = rd.questionerId === myId;
+  document.getElementById('questioner-view').style.display = isQ ? 'block' : 'none';
+  document.getElementById('guesser-view').style.display = isQ ? 'none' : 'block';
+  document.getElementById('hint-input-area').style.display = isQ && !rd.solved ? 'block' : 'none';
+  document.getElementById('answer-input-area').style.display = !isQ && !rd.solved ? 'block' : 'none';
+  if (isQ) {
     document.getElementById('word-category').textContent = rd.category;
     document.getElementById('word-display').textContent = rd.word;
   } else {
     document.getElementById('questioner-name-display').textContent = `${rd.questionerName}이(가) 설명 중 💬`;
     document.getElementById('hint-display').textContent = rd.hints || '힌트를 기다리는 중...';
   }
-
-  // 타이머
   clearTimerInterval();
   if (!rd.solved) startTimer(rd.startedAt);
 }
 
 // ── 타이머 ──
+const DURATION = 90;
 function startTimer(startedAt) {
-  const DURATION = 60;
+  lastTickSecond = -1;
   function tick() {
     const elapsed = Math.floor((Date.now() - startedAt) / 1000);
     const left = Math.max(0, DURATION - elapsed);
-    document.getElementById('timer-num').textContent = left;
+    const timerNum = document.getElementById('timer-num');
+    timerNum.textContent = left;
+    timerNum.className = 'timer-num' + (left <= 10 ? ' urgent' : '');
     const pct = (left / DURATION) * 100;
     const bar = document.getElementById('timer-bar');
     bar.style.width = pct + '%';
-    bar.style.background = left > 20 ? '#f5a623' : '#e94560';
+    bar.style.background = left > 30 ? '#f5a623' : left > 10 ? '#ff6b35' : '#e94560';
+    // 10초 이하 째깍째깍
+    if (left <= 10 && left > 0 && left !== lastTickSecond) {
+      lastTickSecond = left;
+      playTick();
+    }
     if (left <= 0) {
       clearTimerInterval();
       if (isHost) timeUp();
     }
   }
   tick();
-  timerInterval = setInterval(tick, 500);
+  timerInterval = setInterval(tick, 300);
 }
 
 function clearTimerInterval() {
@@ -761,33 +759,25 @@ function clearTimerInterval() {
 
 async function timeUp() {
   if (!roundData || roundData.solved) return;
-  addSystemMsg(`⏰ 시간 초과! 정답은 "${roundData.word}"이었어요`);
+  playTimeUp();
+  await addSystemMsg(`⏰ 시간 초과! 정답은 "${roundData.word}"이었어요`);
   await update(ref(db, `rooms/${roomCode}/round`), { solved: true });
-  setTimeout(() => { if (isHost) startNextRound(); }, 2500);
+  setTimeout(() => { if (isHost) startNextRound(); }, 3000);
 }
 
-// ── 힌트 전송 (출제자) ──
+// ── 힌트 전송 ──
 window.sendHint = async function() {
   const input = document.getElementById('hint-input');
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
-
   const newHints = (roundData?.hints ? roundData.hints + '\n' : '') + text;
   await update(ref(db, `rooms/${roomCode}/round`), { hints: newHints });
-
-  // 채팅에도 표시
   await push(ref(db, `rooms/${roomCode}/chat`), {
-    name: myName,
-    text: `💬 ${text}`,
-    type: 'hint',
-    ts: Date.now()
+    name: myName, text, type: 'hint', senderId: myId, ts: Date.now()
   });
 };
-
-document.getElementById('hint-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') window.sendHint();
-});
+document.getElementById('hint-input').addEventListener('keydown', e => { if (e.key === 'Enter') window.sendHint(); });
 
 // ── 정답 제출 ──
 window.submitAnswer = async function() {
@@ -795,50 +785,27 @@ window.submitAnswer = async function() {
   const text = input.value.trim();
   if (!text || !roundData || roundData.solved) return;
   input.value = '';
-
-  // 채팅에 추가
   await push(ref(db, `rooms/${roomCode}/chat`), {
-    name: myName,
-    text,
-    type: 'answer',
-    senderId: myId,
-    ts: Date.now()
+    name: myName, text, type: 'answer', senderId: myId, ts: Date.now()
   });
-
-  // 정답 체크 (유사 매칭)
-  const correct = checkAnswer(text, roundData.word);
-  if (correct) {
-    // 정답!
+  if (checkAnswer(text, roundData.word)) {
     clearTimerInterval();
-    showCorrectOverlay();
-    addSystemMsg(`🎉 ${myName}이(가) 정답! "${roundData.word}"`);
-
-    // 점수 업데이트
+    playCorrect();
+    // 점수
     const pSnap = await get(ref(db, `rooms/${roomCode}/players/${myId}`));
-    const curScore = pSnap.val()?.score || 0;
-    await update(ref(db, `rooms/${roomCode}/players/${myId}`), { score: curScore + 10 });
-
-    // 출제자도 점수
+    await update(ref(db, `rooms/${roomCode}/players/${myId}`), { score: (pSnap.val()?.score || 0) + 10 });
     const qSnap = await get(ref(db, `rooms/${roomCode}/players/${roundData.questionerId}`));
-    const qScore = qSnap.val()?.score || 0;
-    await update(ref(db, `rooms/${roomCode}/players/${roundData.questionerId}`), { score: qScore + 5 });
-
-    await update(ref(db, `rooms/${roomCode}/round`), { solved: true, solverId: myId });
-
-    setTimeout(() => { if (isHost) startNextRound(); }, 2500);
+    await update(ref(db, `rooms/${roomCode}/players/${roundData.questionerId}`), { score: (qSnap.val()?.score || 0) + 5 });
+    await update(ref(db, `rooms/${roomCode}/round`), { solved: true, solverId: myId, solverName: myName });
+    setTimeout(() => { if (isHost) startNextRound(); }, 3500);
   }
 };
-
-document.getElementById('answer-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') window.submitAnswer();
-});
+document.getElementById('answer-input').addEventListener('keydown', e => { if (e.key === 'Enter') window.submitAnswer(); });
 
 function checkAnswer(input, answer) {
   const a = input.replace(/\s/g,'').toLowerCase();
   const b = answer.replace(/\s/g,'').toLowerCase();
   if (a === b) return true;
-  // 부분 포함 (짧은 단어)
-  if (b.length <= 3 && a === b) return true;
   if (b.length > 3 && (a.includes(b) || b.includes(a))) return true;
   return false;
 }
@@ -847,16 +814,12 @@ function checkAnswer(input, answer) {
 function renderChat(msgs) {
   const area = document.getElementById('chat-area');
   area.innerHTML = msgs.map(m => {
-    if (m.type === 'system') {
-      return `<div class="chat-msg system"><div class="msg-bubble">${m.text}</div></div>`;
-    }
-    if (m.type === 'correct') {
-      return `<div class="chat-msg system correct-msg"><div class="msg-bubble">🎉 ${m.text}</div></div>`;
-    }
+    if (m.type === 'system') return `<div class="chat-msg system"><div class="msg-bubble">${m.text}</div></div>`;
     const isMe = m.senderId === myId;
-    const cls = isMe ? 'me' : 'other';
-    return `<div class="chat-msg ${cls}">
-      ${!isMe ? `<div class="msg-name">${m.name}</div>` : ''}
+    if (isMe) return `<div class="chat-msg me"><div class="msg-bubble">${m.text}</div></div>`;
+    const colorCls = m.type === 'hint' ? 'hint-bubble' : getColorClass(m.senderId || m.name);
+    return `<div class="chat-msg other ${colorCls}">
+      <div class="msg-name">${m.name}</div>
       <div class="msg-bubble">${m.text}</div>
     </div>`;
   }).join('');
@@ -867,59 +830,47 @@ async function addSystemMsg(text) {
   await push(ref(db, `rooms/${roomCode}/chat`), { type: 'system', text, ts: Date.now() });
 }
 
-// ── 정답 오버레이 ──
-function showCorrectOverlay() {
-  const el = document.getElementById('correct-overlay');
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 1500);
+// ── 정답 팝업 + 폭죽 ──
+function showCorrectPopup(solverName, word) {
+  document.getElementById('popup-solver-name').textContent = `🙌 ${solverName}님이 맞췄습니다!`;
+  document.getElementById('popup-word').textContent = `"${word}"`;
+  const popup = document.getElementById('correct-popup');
+  popup.classList.add('show');
+  launchFireworks();
+  setTimeout(() => popup.classList.remove('show'), 3000);
 }
 
 // ── 결과 ──
 async function showResult() {
-  clearListeners();
-  clearTimerInterval();
+  clearListeners(); clearTimerInterval();
   showScreen('result');
-
   const pSnap = await get(ref(db, `rooms/${roomCode}/players`));
-  const players = Object.entries(pSnap.val() || {}).map(([id, p]) => ({ id, ...p }))
-    .sort((a, b) => b.score - a.score);
-
-  // 포디움
+  const players = Object.entries(pSnap.val() || {}).map(([id,p]) => ({id,...p})).sort((a,b) => b.score - a.score);
   const podium = document.getElementById('result-podium');
   const top3 = players.slice(0, 3);
-  const order = top3.length >= 3 ? [1, 0, 2] : top3.length === 2 ? [1, 0] : [0];
-  const ranks = ['🥇', '🥈', '🥉'];
-  const classes = ['p1', 'p2', 'p3'];
+  const order = top3.length >= 3 ? [1,0,2] : top3.length === 2 ? [1,0] : [0];
   podium.innerHTML = order.map(i => {
-    const p = top3[i];
-    if (!p) return '';
-    return `<div class="podium-item ${classes[i]}">
-      <div class="podium-rank">${ranks[i]}</div>
+    const p = top3[i]; if (!p) return '';
+    return `<div class="podium-item ${['p1','p2','p3'][i]}">
+      <div class="podium-rank">${['🥇','🥈','🥉'][i]}</div>
       <div class="podium-name">${p.name}</div>
       <div class="podium-score">${p.score}점</div>
       <div class="podium-bar"></div>
     </div>`;
   }).join('');
-
-  // 전체 순위
-  const rankList = document.getElementById('result-rank-list');
-  rankList.innerHTML = players.map((p, i) => `
+  document.getElementById('result-rank-list').innerHTML = players.map((p,i) => `
     <div class="rank-item">
-      <div class="rank-num">${i + 1}</div>
-      <div class="rank-name">${p.name}${p.id === myId ? ' (나)' : ''}</div>
+      <div class="rank-num">${i+1}</div>
+      <div class="rank-name">${p.name}${p.id===myId?' (나)':''}</div>
       <div class="rank-score">${p.score}점</div>
-    </div>
-  `).join('');
-
+    </div>`).join('');
   if (isHost) document.getElementById('btn-play-again').style.display = 'block';
 }
 
 window.playAgain = async function() {
-  // 점수 초기화
   const pSnap = await get(ref(db, `rooms/${roomCode}/players`));
-  const players = pSnap.val() || {};
   const updates = {};
-  Object.keys(players).forEach(id => { updates[`rooms/${roomCode}/players/${id}/score`] = 0; });
+  Object.keys(pSnap.val() || {}).forEach(id => { updates[`rooms/${roomCode}/players/${id}/score`] = 0; });
   await update(ref(db), updates);
   await remove(ref(db, `rooms/${roomCode}/round`));
   await remove(ref(db, `rooms/${roomCode}/chat`));
@@ -928,11 +879,7 @@ window.playAgain = async function() {
   listenGame();
 };
 
-window.goHome = function() {
-  clearListeners();
-  clearTimerInterval();
-  showScreen('home');
-};
+window.goHome = function() { clearListeners(); clearTimerInterval(); showScreen('home'); };
 </script>
 </body>
 </html>
