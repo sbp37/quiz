@@ -14,9 +14,9 @@
     --text:#f0f0f0; --muted:#888; --border:#2a2a4a;
   }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html, body { height:100%; overscroll-behavior-y:contain; }
-  body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); display:flex; flex-direction:column; align-items:center; overscroll-behavior:none; }
-  #app { width:100%; max-width:480px; height:100dvh; display:flex; flex-direction:column; overflow:hidden; }
+  html, body { height:100%; overscroll-behavior:none; }
+  body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); display:flex; flex-direction:column; align-items:center; }
+  #app { width:100%; max-width:480px; display:flex; flex-direction:column; }
   .screen { display:none; flex-direction:column; flex:1; padding:20px 18px; overflow-y:auto; }
   .screen.active { display:flex; }
   .logo { font-size:2rem; font-weight:900; text-align:center; margin-bottom:4px; }
@@ -47,9 +47,10 @@
   .diff-btn { flex:1; padding:10px 4px; border:2px solid var(--border); border-radius:12px; background:var(--surface); color:var(--muted); font-family:'Noto Sans KR',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; transition:all 0.2s; text-align:center; }
   .diff-btn.active { border-color:var(--accent2); color:var(--accent2); background:#1e1a0a; }
 
-  /* 게임 화면 */
-  #screen-game { padding:0; overflow:hidden; display:none; flex-direction:column; }
+  /* 게임 화면 - visualViewport 기반 고정 */
+  #screen-game { padding:0; overflow:hidden; display:none; flex-direction:column; position:fixed; top:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; }
   #screen-game.active { display:flex; }
+
   .game-header { flex-shrink:0; background:var(--surface); padding:10px 14px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
   .round-badge { background:var(--accent); color:#fff; font-size:0.72rem; font-weight:700; padding:4px 9px; border-radius:20px; white-space:nowrap; }
   .timer-bar-wrap { flex:1; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
@@ -70,11 +71,9 @@
   .questioner-name { font-size:0.92rem; font-weight:700; color:var(--accent3); margin-bottom:5px; }
   .hint-label { font-size:0.68rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
   .hint-display { background:var(--surface); border-radius:9px; padding:9px 11px; min-height:40px; max-height:68px; overflow-y:auto; font-size:0.88rem; line-height:1.5; white-space:pre-wrap; word-break:break-all; }
-
-  /* 다음 라운드 카운트 */
   .next-round-banner { background:linear-gradient(135deg,#0a2e1a,#0a1f2e); border:1px solid var(--accent3); border-radius:12px; padding:10px 14px; text-align:center; margin-top:6px; font-size:0.88rem; color:var(--accent3); font-weight:700; }
 
-  .chat-area { flex:1; overflow-y:auto; padding:8px 14px 4px; display:flex; flex-direction:column; gap:5px; min-height:0; -webkit-overflow-scrolling:touch; cursor:text; }
+  .chat-area { overflow-y:auto; padding:8px 14px 4px; display:flex; flex-direction:column; gap:5px; -webkit-overflow-scrolling:touch; cursor:text; }
   .chat-msg { display:flex; flex-direction:column; max-width:82%; }
   .chat-msg.me { align-self:flex-end; align-items:flex-end; }
   .chat-msg.other { align-self:flex-start; }
@@ -91,19 +90,18 @@
   .chat-msg.color-6 .msg-bubble { background:#3a4a1a; border-bottom-left-radius:4px; }
   .chat-msg.questioner-hint .msg-bubble { background:linear-gradient(135deg,#3d0a1e,#1a0d30); border:2px solid var(--accent2); color:var(--accent2); font-weight:700; border-bottom-left-radius:4px; box-shadow:0 0 10px rgba(245,166,35,0.3); }
   .chat-msg.system .msg-bubble { background:transparent; color:var(--accent2); font-weight:700; font-size:0.8rem; text-align:center; padding:3px 0; }
+
   .input-area { flex-shrink:0; padding:8px 14px; border-top:1px solid var(--border); background:var(--bg); }
   .input-row { display:flex; gap:7px; }
   .input-row .input { margin-bottom:0; flex:1; padding:11px 13px; font-size:0.93rem; }
   .pass-row { display:flex; justify-content:flex-end; margin-top:6px; }
 
-  /* 카운트다운 */
   .countdown-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); display:flex; align-items:center; justify-content:center; z-index:300; flex-direction:column; gap:8px; }
   .countdown-num { font-size:9rem; font-weight:900; color:var(--accent2); animation:countPop 0.6s ease; line-height:1; }
   .countdown-go { font-size:4rem; font-weight:900; color:var(--accent3); animation:countPop 0.4s ease; }
   .countdown-label { font-size:1rem; color:var(--muted); }
   @keyframes countPop { 0%{transform:scale(0.3);opacity:0}60%{transform:scale(1.2)}100%{transform:scale(1);opacity:1} }
 
-  /* 정답 팝업 */
   .correct-popup { position:fixed; inset:0; background:rgba(0,0,0,0.78); display:flex; align-items:center; justify-content:center; z-index:200; opacity:0; pointer-events:none; transition:opacity 0.3s; }
   .correct-popup.show { opacity:1; }
   .correct-popup-box { background:linear-gradient(135deg,#0d2b1a,#0a1f2e); border:3px solid var(--accent3); border-radius:28px; padding:28px 32px; text-align:center; transform:scale(0.6); transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1); max-width:290px; width:85%; }
@@ -115,7 +113,6 @@
   .correct-popup-score { font-size:0.85rem; color:var(--muted); }
   .next-countdown { font-size:1.1rem; font-weight:700; color:var(--accent3); margin-top:8px; }
 
-  /* 결과 */
   #screen-result { text-align:center; }
   .winner-banner { padding:28px 20px 16px; background:linear-gradient(180deg,#1a0d00,var(--bg)); border-radius:0 0 30px 30px; margin:-20px -18px 20px; }
   .winner-crown { font-size:3rem; margin-bottom:4px; animation:float 2s ease-in-out infinite; }
@@ -141,14 +138,11 @@
   @keyframes spin { to{transform:rotate(360deg)} }
   #fireworks-canvas { position:fixed; inset:0; pointer-events:none; z-index:199; opacity:0; transition:opacity 0.3s; }
   #fireworks-canvas.show { opacity:1; }
-
-  /* 방장 이탈 알림 */
   .host-left-banner { position:fixed; top:0; left:50%; transform:translateX(-50%); width:100%; max-width:480px; background:var(--accent); color:#fff; padding:12px 16px; text-align:center; font-weight:700; font-size:0.9rem; z-index:400; }
 </style>
 </head>
 <body>
 <div id="app">
-  <!-- ① 홈 -->
   <div class="screen active" id="screen-home">
     <div style="margin-top:50px;">
       <div class="logo">🎯 말<span>해</span>봐!</div>
@@ -174,7 +168,6 @@
     </div>
   </div>
 
-  <!-- ② 로비 -->
   <div class="screen" id="screen-lobby">
     <div class="logo" style="font-size:1.3rem;margin-top:16px;">🎯 말해봐!</div>
     <div class="card" style="text-align:center;margin-top:12px;">
@@ -214,7 +207,6 @@
     <button class="btn btn-secondary" style="margin-top:6px;" onclick="leaveRoom()">🚪 나가기</button>
   </div>
 
-  <!-- ③ 게임 -->
   <div class="screen" id="screen-game">
     <div class="game-header">
       <div class="round-badge" id="game-round-badge">1/5</div>
@@ -224,10 +216,7 @@
     <div class="info-panel" id="info-panel">
       <div id="questioner-view" style="display:none;">
         <div class="questioner-panel">
-          <div>
-            <span class="category-badge" id="word-category">영화</span>
-            <span class="diff-badge medium" id="word-diff-badge">중급</span>
-          </div>
+          <div><span class="category-badge" id="word-category">영화</span><span class="diff-badge medium" id="word-diff-badge">중급</span></div>
           <div class="word-reveal" id="word-display">???</div>
           <div class="word-hint-small">⚠️ 제시어를 직접 말하면 안 돼요!</div>
         </div>
@@ -248,7 +237,7 @@
         <button class="btn btn-primary btn-sm" onclick="sendHint()">전송</button>
       </div>
       <div class="pass-row">
-        <button class="btn btn-orange btn-sm" onclick="passRound()" style="font-size:0.78rem;padding:7px 14px;">⏭ 패스 (모르겠어요)</button>
+        <button class="btn btn-orange btn-sm" onclick="passRound()" style="font-size:0.78rem;padding:7px 14px;">⏭ 패스</button>
       </div>
     </div>
     <div class="input-area" id="answer-input-area" style="display:none;">
@@ -259,7 +248,6 @@
     </div>
   </div>
 
-  <!-- ④ 결과 -->
   <div class="screen" id="screen-result">
     <div class="winner-banner">
       <div class="winner-crown">👑</div>
@@ -290,7 +278,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, get, update, onValue, push, remove, serverTimestamp, off }
+import { getDatabase, ref, set, get, update, onValue, push, remove, serverTimestamp, off, runTransaction }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -305,14 +293,144 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// ── 닉네임 이모지 ──
-const NAME_EMOJIS=['🐱','🐶','🦊','🐼','🐨','🦁','🐯','🐸','🐧','🦄','🐙','🦋','🐬','🦉','🐺','🦝','🐮','🐷','🦔','🐻'];
-function addEmoji(name){ return NAME_EMOJIS[Math.floor(Math.random()*NAME_EMOJIS.length)]+' '+name; }
+// ── visualViewport 기반 레이아웃 (키보드 대응) ──
+function applyViewport() {
+  const gameEl = document.getElementById('screen-game');
+  if (!gameEl.classList.contains('active')) return;
+  const vv = window.visualViewport;
+  if (!vv) return;
+  const h = vv.height;
+  const headerH = document.querySelector('.game-header')?.offsetHeight || 46;
+  const infoPanelH = document.getElementById('info-panel')?.offsetHeight || 100;
+  const inputAreaH = (() => {
+    const h1 = document.getElementById('hint-input-area');
+    const h2 = document.getElementById('answer-input-area');
+    if (h1 && h1.style.display !== 'none') return h1.offsetHeight;
+    if (h2 && h2.style.display !== 'none') return h2.offsetHeight;
+    return 0;
+  })();
+  const chatH = Math.max(80, h - headerH - infoPanelH - inputAreaH - 8);
+  gameEl.style.height = h + 'px';
+  gameEl.style.top = vv.offsetTop + 'px';
+  const chatEl = document.getElementById('chat-area');
+  if (chatEl) chatEl.style.height = chatH + 'px';
+}
+
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', applyViewport);
+  window.visualViewport.addEventListener('scroll', applyViewport);
+}
+window.addEventListener('resize', applyViewport);
+
+// ── 배경음악 (느리고 묘한 로우파이 신스) ──
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+let bgmPlaying = false;
+
+function getAudio() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function startBGM() {
+  if (bgmPlaying) return;
+  bgmPlaying = true;
+  const c = getAudio();
+
+  // 귀엽고 적당히 긴급한 멜로디
+  // 밝은 단조 (A단조), 중간 템포, 게임쇼 느낌
+  const melody = [
+    440, 494, 440, 392, 440, 0, 392, 0,
+    349, 392, 349, 330, 349, 0, 330, 0,
+    392, 440, 494, 440, 392, 370, 330, 0,
+    294, 330, 294, 262, 294, 0, 262, 0,
+    330, 392, 440, 494, 523, 0, 494, 0,
+    440, 494, 440, 392, 370, 330, 294, 0,
+    330, 370, 392, 440, 494, 440, 392, 0,
+    349, 330, 294, 330, 349, 392, 440, 0
+  ];
+
+  // 통통 튀는 베이스
+  const bass = [
+    220, 0, 220, 0, 185, 0, 185, 0,
+    175, 0, 175, 0, 165, 0, 165, 0,
+    196, 0, 196, 0, 185, 0, 185, 0,
+    147, 0, 147, 0, 165, 0, 165, 0,
+    165, 0, 196, 0, 220, 0, 220, 0,
+    220, 0, 185, 0, 175, 0, 165, 0,
+    165, 0, 185, 0, 196, 0, 220, 0,
+    175, 0, 165, 0, 175, 0, 196, 0
+  ];
+
+  // 귀여운 리듬 (킥 느낌)
+  const rhythm = [
+    1,0,0,0,1,0,0,0, 1,0,0,0,1,0,0,0,
+    1,0,0,0,1,0,0,0, 1,0,0,0,1,0,0,0,
+    1,0,0,0,1,0,0,0, 1,0,0,0,1,0,0,0,
+    1,0,0,0,1,0,0,0, 1,0,0,0,1,0,1,0
+  ];
+
+  const noteLen = 0.18; // 중간 템포 - 빠르지도 느리지도 않게
+  const totalLen = melody.length * noteLen;
+
+  function playLoop(startTime) {
+    if (!bgmPlaying) return;
+
+    // 멜로디 - 밝은 사각파 (귀여운 전자음)
+    melody.forEach((freq, i) => {
+      if (freq === 0) return;
+      const t = startTime + i * noteLen;
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'square';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.055, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + noteLen * 0.75);
+      o.start(t); o.stop(t + noteLen);
+    });
+
+    // 베이스 - 통통 튀는 사인파
+    bass.forEach((freq, i) => {
+      if (freq === 0) return;
+      const t = startTime + i * noteLen;
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'sine';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.07, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + noteLen * 0.6);
+      o.start(t); o.stop(t + noteLen);
+    });
+
+    // 리듬 - 귀여운 타격음
+    rhythm.forEach((on, i) => {
+      if (!on) return;
+      const t = startTime + i * noteLen;
+      const o = c.createOscillator();
+      const g = c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type = 'sine';
+      o.frequency.setValueAtTime(180, t);
+      o.frequency.exponentialRampToValueAtTime(60, t + 0.08);
+      g.gain.setValueAtTime(0.06, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+      o.start(t); o.stop(t + 0.1);
+    });
+
+    setTimeout(() => playLoop(c.currentTime + 0.05), (totalLen - 0.15) * 1000);
+  }
+
+  playLoop(c.currentTime + 0.1);
+}
+
+function stopBGM() {
+  bgmPlaying = false;
+}
 
 // ── 효과음 ──
-const AudioCtx=window.AudioContext||window.webkitAudioContext;
-let audioCtx=null;
-function getAudio(){ if(!audioCtx) audioCtx=new AudioCtx(); if(audioCtx.state==='suspended') audioCtx.resume(); return audioCtx; }
 function playClick(){ try{ const c=getAudio(),o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=700;o.type='sine'; g.gain.setValueAtTime(0.1,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.07); o.start();o.stop(c.currentTime+0.07); }catch(e){} }
 function playJoin(){ try{ const c=getAudio(); [523,659].forEach((f,i)=>{ const o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=f;o.type='sine'; const t=c.currentTime+i*0.12; g.gain.setValueAtTime(0.15,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.2); o.start(t);o.stop(t+0.2); }); }catch(e){} }
 function playTick(){ try{ const c=getAudio(),o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=1400;o.type='square'; g.gain.setValueAtTime(0.07,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.04); o.start();o.stop(c.currentTime+0.04); }catch(e){} }
@@ -321,6 +439,7 @@ function playFanfare(){ try{ const c=getAudio(); [523,659,784,659,784,1047].forE
 function playCountdown(){ try{ const c=getAudio(),o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=880;o.type='sine'; g.gain.setValueAtTime(0.2,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.15); o.start();o.stop(c.currentTime+0.15); }catch(e){} }
 function playGo(){ try{ const c=getAudio(); [880,1047,1318].forEach((f,i)=>{ const o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=f;o.type='sine'; const t=c.currentTime+i*0.1; g.gain.setValueAtTime(0.2,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.2); o.start(t);o.stop(t+0.2); }); }catch(e){} }
 function playTimeUp(){ try{ const c=getAudio(); [400,300,200].forEach((f,i)=>{ const o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=f;o.type='sawtooth'; const t=c.currentTime+i*0.15; g.gain.setValueAtTime(0.14,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.2); o.start(t);o.stop(t+0.2); }); }catch(e){} }
+
 document.querySelectorAll('.btn').forEach(b=>b.addEventListener('click',playClick));
 
 // ── 폭죽 ──
@@ -330,42 +449,42 @@ let particles=[];
 function launchFireworks(){ canvas.width=window.innerWidth;canvas.height=window.innerHeight; canvas.classList.add('show');particles=[]; const colors=['#f5a623','#e94560','#00d4aa','#a78bfa','#fbbf24','#34d399','#fff']; for(let b=0;b<3;b++) setTimeout(()=>{ const cx=window.innerWidth*(0.25+Math.random()*0.5),cy=window.innerHeight*(0.2+Math.random()*0.3); for(let i=0;i<80;i++){ const angle=(Math.PI*2*i)/80,speed=2+Math.random()*6; particles.push({x:cx,y:cy,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed-1,color:colors[Math.floor(Math.random()*colors.length)],life:1,size:3+Math.random()*4}); } },b*250); animFireworks(); }
 function animFireworks(){ fctx.clearRect(0,0,canvas.width,canvas.height); particles=particles.filter(p=>p.life>0.01); particles.forEach(p=>{ p.x+=p.vx;p.y+=p.vy;p.vy+=0.12;p.vx*=0.98;p.life-=0.016; fctx.globalAlpha=p.life;fctx.fillStyle=p.color;fctx.beginPath();fctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2);fctx.fill(); }); fctx.globalAlpha=1; if(particles.length>0) requestAnimationFrame(animFireworks); else canvas.classList.remove('show'); }
 
-// ── 제시어 DB (초급/중급, 카테고리별 30개) ──
+// ── 제시어 DB ──
 const WORDS = {
   easy: {
-    "🎬 영화/드라마":["기생충","부산행","오징어게임","어벤져스","타이타닉","해리포터","겨울왕국","라이온킹","인사이드아웃","토이스토리","알라딘","미녀와야수","슈렉","니모를찾아서","업","코코","라따뚜이","월-E","빅히어로","주토피아","어거스트러시","나홀로집에","맥스","베이브","패딩턴","곰돌이푸","소울","루카","엔칸토","도리를찾아서"],
+    "🎬 영화/드라마":["기생충","부산행","오징어게임","어벤져스","타이타닉","해리포터","겨울왕국","라이온킹","인사이드아웃","토이스토리","알라딘","미녀와야수","슈렉","니모를찾아서","업","코코","라따뚜이","월-E","빅히어로","주토피아","나홀로집에","베이브","소울","루카","엔칸토","도리를찾아서","모아나","뮬란","라푼젤","포카혼타스"],
     "🍔 음식":["치킨","피자","라면","김치찌개","삼겹살","떡볶이","짜장면","비빔밥","냉면","햄버거","초밥","불고기","순대","김밥","국수","된장국","계란말이","볶음밥","오므라이스","샌드위치","핫도그","감자튀김","팝콘","아이스크림","케이크","도넛","쿠키","와플","팬케이크","크레이프"],
     "🌍 나라/도시":["한국","일본","미국","프랑스","중국","영국","독일","이탈리아","호주","캐나다","스페인","러시아","브라질","인도","멕시코","태국","베트남","인도네시아","필리핀","말레이시아","서울","도쿄","파리","뉴욕","런던","베이징","로마","시드니","방콕","바르셀로나"],
     "🐾 동물":["강아지","고양이","토끼","판다","펭귄","코끼리","기린","사자","호랑이","원숭이","곰","늑대","여우","돌고래","앵무새","햄스터","고슴도치","거북이","금붕어","카나리아","말","소","돼지","닭","오리","양","염소","당나귀","낙타","얼룩말"],
     "🎵 아이돌/가수":["BTS","블랙핑크","트와이스","소녀시대","빅뱅","아이유","싸이","뉴진스","아이브","엑소","샤이니","2NE1","슈퍼주니어","원더걸스","카라","에픽하이","다이나믹듀오","자이언티","박재범","이효리"],
     "🏀 스포츠":["축구","농구","야구","수영","테니스","골프","볼링","배드민턴","탁구","스키","스케이트","마라톤","사이클","권투","태권도","유도","레슬링","배구","럭비","하키"],
-    "🎮 게임":["마리오","포켓몬","마인크래프트","테트리스","로블록스","배틀그라운드","리그오브레전드","오버워치","닌텐도스위치","플레이스테이션","젤다","동물의숲","피파","NBA2K","어몽어스","스타크래프트","디아블로","카트라이더","메이플스토리","던전앤파이터"],
-    "📺 애니/만화":["짱구","도라에몽","포켓몬","드래곤볼","원피스","나루토","코난","신데렐라","백설공주","피노키오","톰과제리","스폰지밥","미키마우스","올라프","라푼젤","모아나","뮬란","포카혼타스","릴로와스티치","헤라클레스"],
-    "👗 브랜드":["나이키","아디다스","삼성","애플","현대","기아","스타벅스","맥도날드","코카콜라","유니클로","자라","H&M","갭","리바이스","컨버스","반스","뉴발란스","크록스","이케아","샤넬"],
+    "🎮 게임":["마리오","포켓몬","마인크래프트","테트리스","로블록스","배틀그라운드","리그오브레전드","오버워치","닌텐도스위치","플레이스테이션","젤다","동물의숲","피파","NBA2K","어몽어스","스타크래프트","카트라이더","메이플스토리","던전앤파이터","클래시로얄"],
+    "📺 애니/만화":["짱구","도라에몽","포켓몬","드래곤볼","원피스","나루토","코난","톰과제리","스폰지밥","미키마우스","올라프","모아나","뮬란","릴로와스티치","헤라클레스","피노키오","신데렐라","백설공주","인어공주","미녀와야수"],
+    "👗 브랜드":["나이키","아디다스","삼성","애플","현대","기아","스타벅스","맥도날드","코카콜라","유니클로","자라","H&M","갭","리바이스","컨버스","반스","뉴발란스","크록스","이케아","롤렉스"],
     "🧠 상식":["무지개","번개","지진","화산","태풍","북극","남극","사막","빙하","오로라","달","태양","별","혜성","운석","산","강","바다","폭포","섬"]
   },
   medium: {
     "🎬 영화/드라마":["인터스텔라","올드보이","범죄도시","신과함께","괴물","베테랑","극한직업","이상한변호사우영우","이태원클라쓰","무빙","지옥","반지의제왕","레옹","미나리","헤어질결심","더글로리","나의아저씨","비밀의숲","킹덤","시그널","응답하라1988","슬기로운의사생활","동백꽃필무렵","갯마을차차차","스물다섯스물하나","그해우리는","빈센조","악의꽃","마우스","경이로운소문"],
-    "🍔 음식":["된장찌개","삼계탕","갈비","마라탕","탕후루","흑당버블티","타코","팟타이","케밥","딤섬","리조또","뇨끼","에그베네딕트","크로와상","티라미수","파에야","카레","퐁듀","나시고렝","통카츠","오니기리","라멘","우동","소바","텐동","규동","오야코동","타코야키","모찌","팥빙수"],
+    "🍔 음식":["된장찌개","삼계탕","갈비","마라탕","탕후루","흑당버블티","타코","팟타이","케밥","딤섬","리조또","뇨끼","에그베네딕트","크로와상","티라미수","파에야","퐁듀","나시고렝","통카츠","오니기리","라멘","우동","소바","텐동","규동","오야코동","타코야키","모찌","팥빙수","마카롱"],
     "🌍 나라/도시":["아르헨티나","터키","이집트","두바이","베니스","프라하","암스테르담","싱가포르","포르투갈","그리스","크로아티아","체코","헝가리","폴란드","스위스","오스트리아","벨기에","네덜란드","덴마크","스웨덴","노르웨이","핀란드","뉴질랜드","남아프리카공화국","모로코","페루","칠레","콜롬비아","쿠바","자메이카"],
-    "🐾 동물":["문어","독수리","코알라","플라밍고","카멜레온","북극곰","카피바라","해달","미어캣","알파카","악어","해파리","치타","고릴라","나무늘보","바다거북","흰수염고래","바다표범","왈라비","쿼카","타조","에뮤","캐시어리","비버","수달","오소리","스컹크","라쿤","오랑우탄","침팬지"],
-    "🎵 아이돌/가수":["세븐틴","스트레이키즈","르세라핌","NCT","에스파","아일릿","투어스","라이즈","보이넥스트도어","있지","여자아이들","케플러","레드벨벳","몬스타엑스","갓세븐","위너","아이콘","AB6IX","더보이즈","엔하이픈"],
-    "🏀 스포츠":["손흥민","류현진","김연아","박지성","이강인","추신수","박세리","페이커","이상화","류승민","안정환","박찬호","최경주","임창용","김태균","이종범","박용택","이대호","강정호","유상철"],
-    "🎮 게임":["발로란트","원신","어몽어스","스플래툰","엘든링","젤다의전설","모동숲","호라이즌","갓오브워","스파이더맨","위쳐3","사이버펑크2077","에이펙스레전드","포트나이트","워크래프트","하스스톤","클래시로얄","브롤스타즈","쿠키런","스카이칠드런"],
-    "📺 애니/만화":["귀멸의칼날","진격의거인","주술회전","이누야샤","슬램덩크","강철의연금술사","헌터헌터","블리치","페어리테일","소드아트온라인","원펀맨","도쿄구울","나의히어로아카데미아","흑집사","케이온","러브라이브","아이돌마스터","마법소녀마도카마기카","스즈미야하루히","에반게리온"],
-    "👗 브랜드":["구찌","루이비통","에르메스","발렌시아가","무신사","젝시믹스","룰루레몬","뉴발란스","반스","아크테릭스","파타고니아","노스페이스","몽클레어","캐나다구스","스톤아일랜드","아미","메종키츠네","르메르","아크네스튜디오","이자벨마랑"],
+    "🐾 동물":["문어","독수리","코알라","플라밍고","카멜레온","북극곰","카피바라","해달","미어캣","알파카","악어","해파리","치타","고릴라","나무늘보","바다거북","흰수염고래","바다표범","왈라비","쿼카","타조","에뮤","비버","수달","오소리","스컹크","라쿤","오랑우탄","침팬지","하이에나"],
+    "🎵 아이돌/가수":["세븐틴","스트레이키즈","르세라핌","NCT","에스파","아일릿","투어스","라이즈","보이넥스트도어","있지","여자아이들","케플러","레드벨벳","몬스타엑스","갓세븐","위너","아이콘","AB6IX","더보이즈","엔하이픈","드림캐쳐","오마이걸","에이핑크","마마무","브레이브걸스","씨스타","포미닛","카라","빅스","인피니트"],
+    "🏀 스포츠":["손흥민","류현진","김연아","박지성","이강인","추신수","박세리","페이커","이상화","류승민","안정환","박찬호","최경주","임창용","김태균","이종범","박용택","이대호","강정호","유상철","오타니쇼헤이","메시","호날두","르브론제임스","스테판커리","타이거우즈","세레나윌리엄스","우사인볼트","마이클조던","페더러"],
+    "🎮 게임":["발로란트","원신","어몽어스","스플래툰","엘든링","호라이즌","갓오브워","스파이더맨","위쳐3","사이버펑크2077","에이펙스레전드","포트나이트","하스스톤","브롤스타즈","쿠키런","스카이칠드런","모동숲","젤다의전설","디아블로","오버워치2"],
+    "📺 애니/만화":["귀멸의칼날","진격의거인","주술회전","이누야샤","슬램덩크","강철의연금술사","헌터헌터","블리치","페어리테일","소드아트온라인","원펀맨","도쿄구울","나의히어로아카데미아","흑집사","케이온","러브라이브","마법소녀마도카마기카","에반게리온","공각기동대","카우보이비밥"],
+    "👗 브랜드":["구찌","루이비통","에르메스","발렌시아가","무신사","젝시믹스","룰루레몬","아크테릭스","파타고니아","노스페이스","몽클레어","캐나다구스","스톤아일랜드","아미","메종키츠네","르메르","아크네스튜디오","이자벨마랑","메종마르지엘라","꼼데가르송"],
     "🧠 상식":["블랙홀","양자역학","DNA","광합성","판구조론","상대성이론","진화론","빅뱅","뉴턴법칙","인공지능","반도체","인터넷","위성","GPS","레이저","초음파","자기장","중력파","플라즈마","나노기술"]
   }
 };
 
 const CATEGORIES = Object.keys(WORDS.medium);
+const NAME_EMOJIS=['🐱','🐶','🦊','🐼','🐨','🦁','🐯','🐸','🐧','🦄','🐙','🦋','🐬','🦉','🐺','🦝','🐮','🐷','🦔','🐻'];
+function addEmoji(name){ return NAME_EMOJIS[Math.floor(Math.random()*NAME_EMOJIS.length)]+' '+name; }
 
-// ── 정답 체크 (엄격) ──
 function checkAnswer(input, answer) {
   const a = input.replace(/\s/g,'').toLowerCase();
   const b = answer.replace(/\s/g,'').toLowerCase();
   if (a === b) return true;
-  // 부분 일치: 입력이 정답 길이의 75% 이상일 때만
   const minLen = Math.ceil(b.length * 0.75);
   if (a.length >= minLen && b.includes(a)) return true;
   return false;
@@ -375,17 +494,22 @@ function checkAnswer(input, answer) {
 let myName='',myId='',roomCode='',isHost=false;
 let listeners={},timerInterval=null,roundData=null,totalRounds=5,difficulty='medium';
 let lastTickSecond=-1, nextCountInterval=null;
+let isStartingNextRound=false; // 중복 실행 방지 잠금
 const COLOR_MAP={};let colorIdx=0;
 function getColorClass(id){ if(!COLOR_MAP[id]){COLOR_MAP[id]=colorIdx%7;colorIdx++;} return 'color-'+COLOR_MAP[id]; }
 function genId(){ return Math.random().toString(36).slice(2,10); }
 function genRoomCode(){ return String(Math.floor(1000+Math.random()*9000)); }
-function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+id).classList.add('active'); }
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(id==='game') setTimeout(applyViewport, 100);
+}
 function clearListeners(){ Object.values(listeners).forEach(fn=>{try{fn();}catch(e){}}); listeners={}; }
 function clearTimerInterval(){ if(timerInterval){clearInterval(timerInterval);timerInterval=null;} }
 function clearNextCountInterval(){ if(nextCountInterval){clearInterval(nextCountInterval);nextCountInterval=null;} }
 window.setDiff=function(d){ difficulty=d; document.querySelectorAll('.diff-btn').forEach(b=>b.classList.toggle('active',b.dataset.diff===d)); };
 
-// 채팅 탭 → 포커스
 document.getElementById('chat-area').addEventListener('click',()=>{
   const h=document.getElementById('hint-input-area');
   const a=document.getElementById('answer-input-area');
@@ -393,14 +517,16 @@ document.getElementById('chat-area').addEventListener('click',()=>{
   else if(a.style.display!=='none') document.getElementById('answer-input').focus();
 });
 
-// ── 홈 ──
+// 입력창 포커스 시 뷰포트 재계산
+document.getElementById('hint-input').addEventListener('focus', ()=>setTimeout(applyViewport,300));
+document.getElementById('answer-input').addEventListener('focus', ()=>setTimeout(applyViewport,300));
+
 window.goCreateRoom=async function(){
   const name=document.getElementById('input-name').value.trim();
   if(!name){alert('닉네임을 입력해주세요!');return;}
   myName=addEmoji(name);myId=genId();roomCode=genRoomCode();isHost=true;
   await set(ref(db,`rooms/${roomCode}`),{host:myId,status:'lobby',totalRounds:5,difficulty:'medium',currentRound:0,createdAt:serverTimestamp()});
   await set(ref(db,`rooms/${roomCode}/players/${myId}`),{name:myName,score:0,isHost:true,joinedAt:serverTimestamp()});
-  // 오래된 방 정리 (24시간 이상)
   cleanOldRooms();
   enterLobby();
 };
@@ -420,21 +546,10 @@ window.goJoinRoom=async function(){
   enterLobby();
 };
 
-// 오래된 방 정리
 async function cleanOldRooms(){
-  try{
-    const snap=await get(ref(db,'rooms'));
-    if(!snap.exists()) return;
-    const now=Date.now();
-    Object.entries(snap.val()).forEach(async([code,room])=>{
-      if(room.createdAt && (now-room.createdAt)>86400000){
-        await remove(ref(db,`rooms/${code}`));
-      }
-    });
-  }catch(e){}
+  try{ const snap=await get(ref(db,'rooms')); if(!snap.exists()) return; const now=Date.now(); Object.entries(snap.val()).forEach(async([code,room])=>{ if(room.createdAt&&(now-room.createdAt)>86400000) await remove(ref(db,`rooms/${code}`)); }); }catch(e){}
 }
 
-// ── 로비 ──
 let prevPlayerCount=0;
 function enterLobby(){
   document.getElementById('lobby-room-code').textContent=roomCode;
@@ -478,26 +593,18 @@ window.leaveRoom=async function(){
 window.startGame=async function(){
   const rounds=parseInt(document.getElementById('select-rounds').value);
   totalRounds=rounds;
-  // 단어 순서 미리 생성해서 Firebase에 저장
-  const wordQueue = buildWordQueue(difficulty, rounds*3); // 여유있게
+  const wordQueue=buildWordQueue(difficulty,rounds*4);
   await remove(ref(db,`rooms/${roomCode}/usedWords`));
-  await set(ref(db,`rooms/${roomCode}/wordQueue`), wordQueue);
-  await set(ref(db,`rooms/${roomCode}/wordQueueIdx`), 0);
+  await set(ref(db,`rooms/${roomCode}/wordQueue`),wordQueue);
+  await set(ref(db,`rooms/${roomCode}/wordQueueIdx`),0);
   await update(ref(db,`rooms/${roomCode}`),{totalRounds:rounds,difficulty,status:'playing',currentRound:0});
 };
 
-// 미리 섞인 단어 큐 생성
-function buildWordQueue(diff, count){
+function buildWordQueue(diff,count){
   let all=[];
   CATEGORIES.forEach(cat=>{ (WORDS[diff][cat]||[]).forEach(w=>all.push({category:cat,word:w})); });
-  // 셔플
   for(let i=all.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [all[i],all[j]]=[all[j],all[i]]; }
-  // count만큼 자르되 부족하면 한 번 더 섞어 붙이기
-  while(all.length<count){
-    const copy=[...all];
-    for(let i=copy.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [copy[i],copy[j]]=[copy[j],copy[i]]; }
-    all=[...all,...copy];
-  }
+  while(all.length<count){ const copy=[...all]; for(let i=copy.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [copy[i],copy[j]]=[copy[j],copy[i]]; } all=[...all,...copy]; }
   return all.slice(0,count).map((item,i)=>({...item,idx:i}));
 }
 
@@ -506,8 +613,9 @@ async function initGame(){
   if(snap.exists()) totalRounds=snap.val();
   const dSnap=await get(ref(db,`rooms/${roomCode}/difficulty`));
   if(dSnap.exists()) difficulty=dSnap.val();
+  isStartingNextRound=false;
   showScreen('game');
-  showCountdown(()=>listenGame());
+  showCountdown(()=>{ startBGM(); listenGame(); });
 }
 
 function showCountdown(cb){
@@ -522,12 +630,14 @@ function showCountdown(cb){
   tick();
 }
 
-// ── 게임 리스닝 ──
 function listenGame(){
   listeners.round=onValue(ref(db,`rooms/${roomCode}/round`),async snap=>{
-    if(!snap.exists()){ if(isHost) await startNextRound(); return; }
+    if(!snap.exists()){
+      if(isHost&&!isStartingNextRound){ isStartingNextRound=true; await startNextRound(); }
+      return;
+    }
     const rd=snap.val();
-    if(rd.solved&&roundData&&!roundData.solved) showCorrectPopup(rd.solverName||'누군가',rd.word,rd.solveTime||null);
+    if(rd.solved&&roundData&&!roundData.solved) showCorrectPopup(rd.solverName||null,rd.word,rd.solveTime||null);
     roundData=rd;
     renderRound(rd);
   });
@@ -536,84 +646,72 @@ function listenGame(){
     renderChat(msgs);
   });
   listeners.statusGame=onValue(ref(db,`rooms/${roomCode}/status`),snap=>{
-    if(snap.val()==='result') showResult();
+    if(snap.val()==='result'){ stopBGM(); showResult(); }
   });
-  // 방장 이탈 감지
   listeners.hostWatch=onValue(ref(db,`rooms/${roomCode}/host`),snap=>{
-    if(!snap.exists()&&!isHost){
-      showHostLeftBanner();
-    }
+    if(!snap.exists()&&!isHost) showHostLeftBanner();
   });
-  // 내가 방에서 제거됐는지 감지
   listeners.selfWatch=onValue(ref(db,`rooms/${roomCode}/players/${myId}`),snap=>{
-    if(!snap.exists()){
-      clearListeners();clearTimerInterval();clearNextCountInterval();
-      showScreen('home');
-    }
+    if(!snap.exists()){ clearListeners();clearTimerInterval();clearNextCountInterval();stopBGM();showScreen('home'); }
   });
 }
 
 function showHostLeftBanner(){
-  const existing=document.getElementById('host-left-banner');
-  if(existing) return;
+  if(document.getElementById('host-left-banner')) return;
   const banner=document.createElement('div');
-  banner.id='host-left-banner';
-  banner.className='host-left-banner';
+  banner.id='host-left-banner';banner.className='host-left-banner';
   banner.textContent='⚠️ 방장이 나갔어요. 게임이 곧 종료됩니다.';
   document.body.appendChild(banner);
-  setTimeout(async()=>{
-    banner.remove();
-    clearListeners();clearTimerInterval();clearNextCountInterval();
-    await remove(ref(db,`rooms/${roomCode}/players/${myId}`));
-    showScreen('home');
-  },3000);
+  setTimeout(async()=>{ banner.remove(); clearListeners();clearTimerInterval();clearNextCountInterval();stopBGM(); await remove(ref(db,`rooms/${roomCode}/players/${myId}`)); showScreen('home'); },3000);
 }
 
 async function startNextRound(){
-  const snap=await get(ref(db,`rooms/${roomCode}/currentRound`));
-  const cur=snap.val()||0,next=cur+1;
-  if(next>totalRounds){ await update(ref(db,`rooms/${roomCode}`),{status:'result'}); return; }
+  try{
+    const snap=await get(ref(db,`rooms/${roomCode}/currentRound`));
+    const cur=snap.val()||0,next=cur+1;
+    if(next>totalRounds){ await update(ref(db,`rooms/${roomCode}`),{status:'result'}); return; }
 
-  const pSnap=await get(ref(db,`rooms/${roomCode}/players`));
-  const players=Object.entries(pSnap.val()||{});
-  if(players.length===0) return;
-  const qi=(next-1)%players.length;
-  const questionerId=players[qi][0],questionerName=players[qi][1].name;
+    const pSnap=await get(ref(db,`rooms/${roomCode}/players`));
+    const players=Object.entries(pSnap.val()||{});
+    if(players.length===0) return;
+    const qi=(next-1)%players.length;
+    const questionerId=players[qi][0],questionerName=players[qi][1].name;
 
-  // 미리 만들어둔 큐에서 단어 가져오기
-  const queueSnap=await get(ref(db,`rooms/${roomCode}/wordQueue`));
-  const idxSnap=await get(ref(db,`rooms/${roomCode}/wordQueueIdx`));
-  const queue=queueSnap.val()||[];
-  const idx=idxSnap.val()||0;
-  const item=queue[idx]||{category:'🎬 영화/드라마',word:'기생충'};
-  await set(ref(db,`rooms/${roomCode}/wordQueueIdx`),idx+1);
+    // transaction으로 인덱스 원자적 증가
+    let wordItem = {category:'🎬 영화/드라마',word:'기생충'};
+    await runTransaction(ref(db,`rooms/${roomCode}/wordQueueIdx`),(currentIdx)=>{
+      return (currentIdx||0)+1;
+    }).then(async(result)=>{
+      const idx=(result.snapshot.val()||1)-1;
+      const queueSnap=await get(ref(db,`rooms/${roomCode}/wordQueue`));
+      const queue=queueSnap.val()||[];
+      if(queue[idx]) wordItem=queue[idx];
+    });
 
-  await remove(ref(db,`rooms/${roomCode}/chat`));
-  await update(ref(db,`rooms/${roomCode}`),{currentRound:next});
-  await set(ref(db,`rooms/${roomCode}/round`),{
-    roundNum:next,questionerId,questionerName,
-    category:item.category,word:item.word,
-    hints:'',solved:false,startedAt:Date.now(),difficulty,passed:false
-  });
-  await addSystemMsg(`🎲 ${next}라운드! ${questionerName}이(가) 설명합니다`);
+    await remove(ref(db,`rooms/${roomCode}/chat`));
+    await update(ref(db,`rooms/${roomCode}`),{currentRound:next});
+    await set(ref(db,`rooms/${roomCode}/round`),{
+      roundNum:next,questionerId,questionerName,
+      category:wordItem.category,word:wordItem.word,
+      hints:'',solved:false,startedAt:Date.now(),difficulty,passed:false
+    });
+    await addSystemMsg(`🎲 ${next}라운드! ${questionerName}이(가) 설명합니다`);
+  }finally{
+    isStartingNextRound=false;
+  }
 }
 
 function renderRound(rd){
   if(!rd) return;
   document.getElementById('game-round-badge').textContent=`${rd.roundNum}/${totalRounds}`;
   const isQ=rd.questionerId===myId;
-
-  // solved이면 입력 전부 숨기기
   document.getElementById('questioner-view').style.display=isQ?'block':'none';
   document.getElementById('guesser-view').style.display=isQ?'none':'block';
   document.getElementById('hint-input-area').style.display=isQ&&!rd.solved?'block':'none';
   document.getElementById('answer-input-area').style.display=!isQ&&!rd.solved?'block':'none';
-
-  // 다음 라운드 배너
   const banner=document.getElementById('next-round-banner');
   if(rd.solved){ banner.style.display='block'; }
-  else { banner.style.display='none'; clearNextCountInterval(); }
-
+  else{ banner.style.display='none'; clearNextCountInterval(); }
   if(isQ){
     document.getElementById('word-category').textContent=rd.category;
     document.getElementById('word-display').textContent=rd.word;
@@ -629,6 +727,7 @@ function renderRound(rd){
   }
   clearTimerInterval();
   if(!rd.solved) startTimer(rd.startedAt);
+  setTimeout(applyViewport, 50);
 }
 
 const DURATION=90;
@@ -640,9 +739,8 @@ function startTimer(startedAt){
     const el=document.getElementById('timer-num');
     el.textContent=left;
     el.className='timer-num'+(left<=10?' urgent':'');
-    const bar=document.getElementById('timer-bar');
-    bar.style.width=(left/DURATION*100)+'%';
-    bar.style.background=left>30?'#f5a623':left>10?'#ff6b35':'#e94560';
+    document.getElementById('timer-bar').style.width=(left/DURATION*100)+'%';
+    document.getElementById('timer-bar').style.background=left>30?'#f5a623':left>10?'#ff6b35':'#e94560';
     if(left<=10&&left>0&&left!==lastTickSecond){lastTickSecond=left;playTick();}
     if(left<=0){clearTimerInterval();if(isHost) timeUp();}
   }
@@ -657,7 +755,6 @@ async function timeUp(){
   startNextRoundCountdown();
 }
 
-// 다음 라운드 카운트다운
 function startNextRoundCountdown(){
   clearNextCountInterval();
   let sec=3;
@@ -665,11 +762,10 @@ function startNextRoundCountdown(){
   function tick(){
     banner.textContent=`⏭ ${sec}초 후 다음 라운드...`;
     banner.style.display='block';
-    if(sec<=0){ clearNextCountInterval(); if(isHost) startNextRound(); return; }
+    if(sec<=0){ clearNextCountInterval(); if(isHost&&!isStartingNextRound){isStartingNextRound=true;startNextRound();} return; }
     sec--;
   }
-  tick();
-  nextCountInterval=setInterval(tick,1000);
+  tick(); nextCountInterval=setInterval(tick,1000);
 }
 
 window.sendHint=async function(){
@@ -682,7 +778,6 @@ window.sendHint=async function(){
 };
 document.getElementById('hint-input').addEventListener('keydown',e=>{if(e.key==='Enter')window.sendHint();});
 
-// 패스
 window.passRound=async function(){
   if(!roundData||roundData.solved) return;
   if(!confirm('패스할까요? 이번 라운드 점수는 없어요.')) return;
@@ -697,14 +792,11 @@ window.submitAnswer=async function(){
   const text=input.value.trim();if(!text||!roundData||roundData.solved) return;input.value='';
   await push(ref(db,`rooms/${roomCode}/chat`),{name:myName,text,type:'answer',senderId:myId,ts:Date.now()});
   if(checkAnswer(text,roundData.word)){
-    clearTimerInterval();
-    playCorrect();
+    clearTimerInterval();playCorrect();
     const elapsed=Math.floor((Date.now()-roundData.startedAt)/1000);
-    // 빠를수록 보너스: 30초 이내 +5점, 60초 이내 +2점
     const bonus=elapsed<=30?5:elapsed<=60?2:0;
-    const baseScore=10;
     const pSnap=await get(ref(db,`rooms/${roomCode}/players/${myId}`));
-    await update(ref(db,`rooms/${roomCode}/players/${myId}`),{score:(pSnap.val()?.score||0)+baseScore+bonus});
+    await update(ref(db,`rooms/${roomCode}/players/${myId}`),{score:(pSnap.val()?.score||0)+10+bonus});
     const qSnap=await get(ref(db,`rooms/${roomCode}/players/${roundData.questionerId}`));
     await update(ref(db,`rooms/${roomCode}/players/${roundData.questionerId}`),{score:(qSnap.val()?.score||0)+5});
     await update(ref(db,`rooms/${roomCode}/round`),{solved:true,solverId:myId,solverName:myName,solveTime:elapsed,bonusScore:bonus});
@@ -732,14 +824,14 @@ async function addSystemMsg(text){
 }
 
 function showCorrectPopup(solverName,word,solveTime){
-  document.getElementById('popup-solver-name').textContent=`🙌 ${solverName}님이 맞췄습니다!`;
+  const nameEl=document.getElementById('popup-solver-name');
+  nameEl.textContent=solverName?`🙌 ${solverName}님이 맞췄습니다!`:'⏰ 시간 초과!';
   document.getElementById('popup-word').textContent=`"${word}"`;
-  const bonus=solveTime!==null&&solveTime<=30?5:solveTime!==null&&solveTime<=60?2:0;
-  document.getElementById('popup-score').textContent=bonus>0?`⚡ 빠른 정답! +${10+bonus}점 (보너스 +${bonus})!`:`+10점`;
+  const bonus=solveTime!==null&&solveTime!==undefined&&solveTime<=30?5:solveTime!==null&&solveTime!==undefined&&solveTime<=60?2:0;
+  document.getElementById('popup-score').textContent=solverName?(bonus>0?`⚡ 빠른 정답! +${10+bonus}점`:'+10점'):'';
   const popup=document.getElementById('correct-popup');
   popup.classList.add('show');
-  launchFireworks();playFanfare();
-  // 팝업 안 카운트
+  if(solverName){ launchFireworks();playFanfare(); }
   let t=3;
   const el=document.getElementById('popup-next-count');
   el.textContent=`${t}초 후 다음 라운드`;
@@ -747,7 +839,7 @@ function showCorrectPopup(solverName,word,solveTime){
 }
 
 async function showResult(){
-  clearListeners();clearTimerInterval();clearNextCountInterval();
+  clearListeners();clearTimerInterval();clearNextCountInterval();stopBGM();
   showScreen('result');
   const pSnap=await get(ref(db,`rooms/${roomCode}/players`));
   const players=Object.entries(pSnap.val()||{}).map(([id,p])=>({id,...p})).sort((a,b)=>b.score-a.score);
@@ -766,17 +858,17 @@ window.playAgain=async function(){
   await update(ref(db),updates);
   await remove(ref(db,`rooms/${roomCode}/round`));
   await remove(ref(db,`rooms/${roomCode}/chat`));
-  // 단어 큐 새로 생성
-  const wordQueue=buildWordQueue(difficulty,totalRounds*3);
+  const wordQueue=buildWordQueue(difficulty,totalRounds*4);
   await set(ref(db,`rooms/${roomCode}/wordQueue`),wordQueue);
   await set(ref(db,`rooms/${roomCode}/wordQueueIdx`),0);
+  isStartingNextRound=false;
   await update(ref(db,`rooms/${roomCode}`),{status:'playing',currentRound:0});
   showScreen('game');
-  showCountdown(()=>listenGame());
+  showCountdown(()=>{ startBGM(); listenGame(); });
 };
 
 window.goHome=async function(){
-  clearListeners();clearTimerInterval();clearNextCountInterval();
+  clearListeners();clearTimerInterval();clearNextCountInterval();stopBGM();
   if(isHost) await remove(ref(db,`rooms/${roomCode}`));
   else await remove(ref(db,`rooms/${roomCode}/players/${myId}`));
   prevPlayerCount=0;showScreen('home');
