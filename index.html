@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>🎯 말해봐!</title>
+<title>🎉 퀴즈파티</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap');
   :root {
@@ -144,9 +144,19 @@
 <body>
 <div id="app">
   <div class="screen active" id="screen-home">
-    <div style="margin-top:50px;">
-      <div class="logo">🎯 말<span>해</span>봐!</div>
+    <div style="margin-top:40px; text-align:center;">
+      <div style="font-size:3.5rem; margin-bottom:8px; animation:float 2s ease-in-out infinite;">🏆</div>
+      <div class="logo">🎉 퀴즈<span>파티</span></div>
       <div class="subtitle">✨ 설명하면 맞추는 실시간 퀴즈 ✨</div>
+      <div style="display:flex; justify-content:center; gap:12px; font-size:1.4rem; margin-bottom:24px;">
+        <span style="animation:float 2s ease-in-out infinite;">🎬</span>
+        <span style="animation:float 2s ease-in-out infinite 0.2s;">🍔</span>
+        <span style="animation:float 2s ease-in-out infinite 0.4s;">🌍</span>
+        <span style="animation:float 2s ease-in-out infinite 0.6s;">🐾</span>
+        <span style="animation:float 2s ease-in-out infinite 0.8s;">🎵</span>
+        <span style="animation:float 2s ease-in-out infinite 1.0s;">🏀</span>
+        <span style="animation:float 2s ease-in-out infinite 1.2s;">🎮</span>
+      </div>
     </div>
     <div class="card">
       <div class="label">👤 닉네임</div>
@@ -161,15 +171,15 @@
         <button class="btn btn-green btn-sm" onclick="goJoinRoom()">입장 🚪</button>
       </div>
     </div>
-    <div class="mt-auto text-center text-muted" style="padding:16px 0;">
+    <div class="mt-auto text-center text-muted" style="padding:12px 0; font-size:0.82rem;">
       🎬 영화 · 🍔 음식 · 🌍 나라 · 🐾 동물 · 🎵 아이돌<br>
       🏀 스포츠 · 🎮 게임 · 📺 애니 · 👗 브랜드 · 🧠 상식<br>
-      설명하고 맞추고 점수 쌓기!
+      💡 설명하고 맞추고 점수 쌓기!
     </div>
   </div>
 
   <div class="screen" id="screen-lobby">
-    <div class="logo" style="font-size:1.3rem;margin-top:16px;">🎯 말해봐!</div>
+    <div class="logo" style="font-size:1.3rem;margin-top:16px;">🎉 퀴즈파티 🎊</div>
     <div class="card" style="text-align:center;margin-top:12px;">
       <div class="label">🔑 방 코드</div>
       <div class="room-code" id="lobby-room-code">----</div>
@@ -190,11 +200,7 @@
             <option value="10">10라운드</option>
           </select>
         </div>
-        <div class="label">🎯 난이도</div>
-        <div class="diff-row">
-          <button class="diff-btn" data-diff="easy" onclick="setDiff('easy')">🌱 초급</button>
-          <button class="diff-btn active" data-diff="medium" onclick="setDiff('medium')">🔥 중급</button>
-        </div>
+
       </div>
       <button class="btn btn-primary" onclick="startGame()">🎮 게임 시작!</button>
     </div>
@@ -216,9 +222,9 @@
     <div class="info-panel" id="info-panel">
       <div id="questioner-view" style="display:none;">
         <div class="questioner-panel">
-          <div><span class="category-badge" id="word-category">영화</span><span class="diff-badge medium" id="word-diff-badge">중급</span></div>
+          <div><span class="category-badge" id="word-category">영화</span></div>
           <div class="word-reveal" id="word-display">???</div>
-          <div class="word-hint-small">⚠️ 제시어를 직접 말하면 안 돼요!</div>
+          <div class="word-hint-small">⚠️ 제시어를 직접 말하면 안 돼요! 🙊</div>
         </div>
       </div>
       <div id="guesser-view" style="display:none;">
@@ -451,33 +457,21 @@ function animFireworks(){ fctx.clearRect(0,0,canvas.width,canvas.height); partic
 
 // ── 제시어 DB ──
 const WORDS = {
-  easy: {
-    "🎬 영화/드라마":["기생충","부산행","오징어게임","어벤져스","타이타닉","해리포터","겨울왕국","라이온킹","인사이드아웃","토이스토리","알라딘","미녀와야수","슈렉","니모를찾아서","업","코코","라따뚜이","월-E","빅히어로","주토피아","나홀로집에","베이브","소울","루카","엔칸토","도리를찾아서","모아나","뮬란","라푼젤","포카혼타스"],
-    "🍔 음식":["치킨","피자","라면","김치찌개","삼겹살","떡볶이","짜장면","비빔밥","냉면","햄버거","초밥","불고기","순대","김밥","국수","된장국","계란말이","볶음밥","오므라이스","샌드위치","핫도그","감자튀김","팝콘","아이스크림","케이크","도넛","쿠키","와플","팬케이크","크레이프"],
-    "🌍 나라/도시":["한국","일본","미국","프랑스","중국","영국","독일","이탈리아","호주","캐나다","스페인","러시아","브라질","인도","멕시코","태국","베트남","인도네시아","필리핀","말레이시아","서울","도쿄","파리","뉴욕","런던","베이징","로마","시드니","방콕","바르셀로나"],
-    "🐾 동물":["강아지","고양이","토끼","판다","펭귄","코끼리","기린","사자","호랑이","원숭이","곰","늑대","여우","돌고래","앵무새","햄스터","고슴도치","거북이","금붕어","카나리아","말","소","돼지","닭","오리","양","염소","당나귀","낙타","얼룩말"],
-    "🎵 아이돌/가수":["BTS","블랙핑크","트와이스","소녀시대","빅뱅","아이유","싸이","뉴진스","아이브","엑소","샤이니","2NE1","슈퍼주니어","원더걸스","카라","에픽하이","다이나믹듀오","자이언티","박재범","이효리"],
-    "🏀 스포츠":["축구","농구","야구","수영","테니스","골프","볼링","배드민턴","탁구","스키","스케이트","마라톤","사이클","권투","태권도","유도","레슬링","배구","럭비","하키"],
-    "🎮 게임":["마리오","포켓몬","마인크래프트","테트리스","로블록스","배틀그라운드","리그오브레전드","오버워치","닌텐도스위치","플레이스테이션","젤다","동물의숲","피파","NBA2K","어몽어스","스타크래프트","카트라이더","메이플스토리","던전앤파이터","클래시로얄"],
-    "📺 애니/만화":["짱구","도라에몽","포켓몬","드래곤볼","원피스","나루토","코난","톰과제리","스폰지밥","미키마우스","올라프","모아나","뮬란","릴로와스티치","헤라클레스","피노키오","신데렐라","백설공주","인어공주","미녀와야수"],
-    "👗 브랜드":["나이키","아디다스","삼성","애플","현대","기아","스타벅스","맥도날드","코카콜라","유니클로","자라","H&M","갭","리바이스","컨버스","반스","뉴발란스","크록스","이케아","롤렉스"],
-    "🧠 상식":["무지개","번개","지진","화산","태풍","북극","남극","사막","빙하","오로라","달","태양","별","혜성","운석","산","강","바다","폭포","섬"]
-  },
-  medium: {
-    "🎬 영화/드라마":["인터스텔라","올드보이","범죄도시","신과함께","괴물","베테랑","극한직업","이상한변호사우영우","이태원클라쓰","무빙","지옥","반지의제왕","레옹","미나리","헤어질결심","더글로리","나의아저씨","비밀의숲","킹덤","시그널","응답하라1988","슬기로운의사생활","동백꽃필무렵","갯마을차차차","스물다섯스물하나","그해우리는","빈센조","악의꽃","마우스","경이로운소문"],
-    "🍔 음식":["된장찌개","삼계탕","갈비","마라탕","탕후루","흑당버블티","타코","팟타이","케밥","딤섬","리조또","뇨끼","에그베네딕트","크로와상","티라미수","파에야","퐁듀","나시고렝","통카츠","오니기리","라멘","우동","소바","텐동","규동","오야코동","타코야키","모찌","팥빙수","마카롱"],
-    "🌍 나라/도시":["아르헨티나","터키","이집트","두바이","베니스","프라하","암스테르담","싱가포르","포르투갈","그리스","크로아티아","체코","헝가리","폴란드","스위스","오스트리아","벨기에","네덜란드","덴마크","스웨덴","노르웨이","핀란드","뉴질랜드","남아프리카공화국","모로코","페루","칠레","콜롬비아","쿠바","자메이카"],
-    "🐾 동물":["문어","독수리","코알라","플라밍고","카멜레온","북극곰","카피바라","해달","미어캣","알파카","악어","해파리","치타","고릴라","나무늘보","바다거북","흰수염고래","바다표범","왈라비","쿼카","타조","에뮤","비버","수달","오소리","스컹크","라쿤","오랑우탄","침팬지","하이에나"],
-    "🎵 아이돌/가수":["세븐틴","스트레이키즈","르세라핌","NCT","에스파","아일릿","투어스","라이즈","보이넥스트도어","있지","여자아이들","케플러","레드벨벳","몬스타엑스","갓세븐","위너","아이콘","AB6IX","더보이즈","엔하이픈","드림캐쳐","오마이걸","에이핑크","마마무","브레이브걸스","씨스타","포미닛","카라","빅스","인피니트"],
-    "🏀 스포츠":["손흥민","류현진","김연아","박지성","이강인","추신수","박세리","페이커","이상화","류승민","안정환","박찬호","최경주","임창용","김태균","이종범","박용택","이대호","강정호","유상철","오타니쇼헤이","메시","호날두","르브론제임스","스테판커리","타이거우즈","세레나윌리엄스","우사인볼트","마이클조던","페더러"],
-    "🎮 게임":["발로란트","원신","어몽어스","스플래툰","엘든링","호라이즌","갓오브워","스파이더맨","위쳐3","사이버펑크2077","에이펙스레전드","포트나이트","하스스톤","브롤스타즈","쿠키런","스카이칠드런","모동숲","젤다의전설","디아블로","오버워치2"],
-    "📺 애니/만화":["귀멸의칼날","진격의거인","주술회전","이누야샤","슬램덩크","강철의연금술사","헌터헌터","블리치","페어리테일","소드아트온라인","원펀맨","도쿄구울","나의히어로아카데미아","흑집사","케이온","러브라이브","마법소녀마도카마기카","에반게리온","공각기동대","카우보이비밥"],
-    "👗 브랜드":["구찌","루이비통","에르메스","발렌시아가","무신사","젝시믹스","룰루레몬","아크테릭스","파타고니아","노스페이스","몽클레어","캐나다구스","스톤아일랜드","아미","메종키츠네","르메르","아크네스튜디오","이자벨마랑","메종마르지엘라","꼼데가르송"],
-    "🧠 상식":["블랙홀","양자역학","DNA","광합성","판구조론","상대성이론","진화론","빅뱅","뉴턴법칙","인공지능","반도체","인터넷","위성","GPS","레이저","초음파","자기장","중력파","플라즈마","나노기술"]
+  all: {
+    "🎬 영화/드라마":["기생충","부산행","오징어게임","어벤져스","타이타닉","해리포터","겨울왕국","라이온킹","인사이드아웃","토이스토리","알라딘","미녀와야수","슈렉","니모를찾아서","업","코코","라따뚜이","빅히어로","주토피아","나홀로집에","소울","루카","모아나","뮬란","라푼젤","인터스텔라","올드보이","범죄도시","신과함께","괴물","베테랑","극한직업","이상한변호사우영우","이태원클라쓰","무빙","지옥","반지의제왕","레옹","미나리","더글로리","나의아저씨","비밀의숲","킹덤","시그널","응답하라1988","슬기로운의사생활","갯마을차차차","스물다섯스물하나","빈센조","마우스"],
+    "🍔 음식":["치킨","피자","라면","김치찌개","삼겹살","떡볶이","짜장면","비빔밥","냉면","햄버거","초밥","불고기","순대","김밥","국수","된장국","계란말이","볶음밥","오므라이스","샌드위치","핫도그","감자튀김","아이스크림","케이크","도넛","쿠키","와플","팬케이크","된장찌개","삼계탕","갈비","마라탕","탕후루","흑당버블티","타코","팟타이","케밥","딤섬","리조또","뇨끼","에그베네딕트","크로와상","티라미수","파에야","퐁듀","나시고렝","오니기리","라멘","우동","소바","텐동","규동","오야코동","타코야키","모찌","팥빙수","마카롱"],
+    "🌍 나라/도시":["한국","일본","미국","프랑스","중국","영국","독일","이탈리아","호주","캐나다","스페인","러시아","브라질","인도","멕시코","태국","베트남","인도네시아","필리핀","말레이시아","서울","도쿄","파리","뉴욕","런던","베이징","로마","시드니","방콕","바르셀로나","터키","이집트","두바이","프라하","그리스","스위스"],
+    "🐾 동물":["강아지","고양이","토끼","판다","펭귄","코끼리","기린","사자","호랑이","원숭이","곰","늑대","여우","돌고래","앵무새","햄스터","고슴도치","거북이","금붕어","말","소","돼지","닭","오리","양","낙타","얼룩말","문어","독수리","코알라","플라밍고","카멜레온","북극곰","카피바라","해달","미어캣","알파카","악어","해파리","치타","고릴라","나무늘보","바다거북","흰수염고래","바다표범","쿼카","타조","비버","수달","오소리","라쿤","오랑우탄","침팬지","하이에나"],
+    "🎵 아이돌/가수":["BTS","블랙핑크","트와이스","소녀시대","빅뱅","아이유","싸이","뉴진스","아이브","엑소","샤이니","2NE1","슈퍼주니어","원더걸스","카라","에픽하이","다이나믹듀오","자이언티","박재범","이효리","세븐틴","스트레이키즈","르세라핌","NCT","에스파","아일릿","투어스","라이즈","보이넥스트도어","있지","여자아이들","레드벨벳","몬스타엑스","갓세븐","위너","아이콘","더보이즈","오마이걸","에이핑크","마마무","브레이브걸스","씨스타","포미닛","빅스","인피니트"],
+    "🏀 스포츠":["축구","농구","야구","수영","테니스","골프","볼링","배드민턴","탁구","스키","스케이트","마라톤","사이클","권투","태권도","유도","레슬링","배구","럭비","하키","손흥민","류현진","김연아","박지성","이강인","추신수","박세리","페이커","이상화","류승민","안정환","박찬호","오타니쇼헤이","메시","호날두","타이거우즈","우사인볼트","마이클조던"],
+    "🎮 게임":["마리오","포켓몬","마인크래프트","테트리스","로블록스","배틀그라운드","리그오브레전드","오버워치","닌텐도스위치","플레이스테이션","동물의숲","피파","NBA2K","카트라이더","메이플스토리","던전앤파이터","클래시로얄","어몽어스","스파이더맨","브롤스타즈","쿠키런","모동숲","젤다의전설","디아블로","오버워치2","마인스위퍼","테일즈런너","크로스파이어","서든어택","피파온라인"],
+    "📺 애니/만화":["짱구","도라에몽","포켓몬","드래곤볼","원피스","나루토","코난","톰과제리","스폰지밥","미키마우스","릴로와스티치","헤라클레스","피노키오","신데렐라","백설공주","인어공주","귀멸의칼날","진격의거인","주술회전","이누야샤","슬램덩크","강철의연금술사","헌터헌터","도쿄구울","에반게리온","세일러문","카드캡터체리","유희왕","디지몬","원펀맨"],
+    "👗 브랜드":["나이키","아디다스","삼성","애플","현대","기아","스타벅스","맥도날드","코카콜라","유니클로","자라","H&M","갭","리바이스","컨버스","반스","뉴발란스","크록스","이케아","롤렉스","에르메스","무신사","노스페이스","구찌","루이비통"],
+    "🧠 상식":["무지개","번개","지진","화산","태풍","북극","남극","사막","빙하","오로라","달","태양","별","혜성","운석","산","강","바다","폭포","섬","블랙홀","광합성","빅뱅","인공지능","반도체","인터넷","GPS","레이저","초음파","해일"]
   }
 };
 
-const CATEGORIES = Object.keys(WORDS.medium);
+const CATEGORIES = Object.keys(WORDS.all);
 const NAME_EMOJIS=['🐱','🐶','🦊','🐼','🐨','🦁','🐯','🐸','🐧','🦄','🐙','🦋','🐬','🦉','🐺','🦝','🐮','🐷','🦔','🐻'];
 function addEmoji(name){ return NAME_EMOJIS[Math.floor(Math.random()*NAME_EMOJIS.length)]+' '+name; }
 
@@ -602,7 +596,7 @@ window.startGame=async function(){
 
 function buildWordQueue(diff,count){
   let all=[];
-  CATEGORIES.forEach(cat=>{ (WORDS[diff][cat]||[]).forEach(w=>all.push({category:cat,word:w})); });
+  CATEGORIES.forEach(cat=>{ (WORDS.all[cat]||[]).forEach(w=>all.push({category:cat,word:w})); });
   for(let i=all.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [all[i],all[j]]=[all[j],all[i]]; }
   while(all.length<count){ const copy=[...all]; for(let i=copy.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [copy[i],copy[j]]=[copy[j],copy[i]]; } all=[...all,...copy]; }
   return all.slice(0,count).map((item,i)=>({...item,idx:i}));
@@ -715,10 +709,6 @@ function renderRound(rd){
   if(isQ){
     document.getElementById('word-category').textContent=rd.category;
     document.getElementById('word-display').textContent=rd.word;
-    const db2=document.getElementById('word-diff-badge');
-    const diffMap={easy:['🌱 초급','easy'],medium:['🔥 중급','medium']};
-    const [txt,cls]=diffMap[rd.difficulty||'medium'];
-    db2.textContent=txt;db2.className='diff-badge '+cls;
   } else {
     document.getElementById('questioner-name-display').textContent=`${rd.questionerName}이(가) 설명 중 💬`;
     const hd=document.getElementById('hint-display');
@@ -811,7 +801,7 @@ function renderChat(msgs){
   area.innerHTML=msgs.map(m=>{
     if(m.type==='system') return `<div class="chat-msg system"><div class="msg-bubble">${m.text}</div></div>`;
     const isMe=m.senderId===myId;
-    if(isMe) return `<div class="chat-msg me"><div class="msg-bubble">${m.text}</div></div>`;
+    if(isMe) return `<div class="chat-msg me"><div class="msg-name" style="text-align:right;">${m.name}</div><div class="msg-bubble">${m.text}</div></div>`;
     const isQHint=m.type==='hint';
     const cls=isQHint?'questioner-hint':getColorClass(m.senderId||m.name);
     return `<div class="chat-msg other ${cls}"><div class="msg-name">${m.name}</div><div class="msg-bubble">${isQHint?'💡 '+m.text:m.text}</div></div>`;
